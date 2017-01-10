@@ -1,0 +1,64 @@
+\documentclass{scrartcl}
+
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+\begin{document}
+
+\section[title]{Logical Agents\footnote{From \textit{Russel, Norvig - Artifical Intelligence A Modern Approach}, Chapter 7}}
+\subsection{Knowledge-based Agents}
+\begin{itemize}
+    \item
+        Central component: \textbf{knowledge base}, which consists of \textbf{sentences}, which are expressed in a \textbf{knowledge representation language}
+    \item
+        \textbf{Axiom}: sentece is taken as given witout being derived from other sentences (which is calles \textbf{inference}
+    \item
+        Two basic operations: \textbf{TELL} and \textbf{ASK} 
+    \item
+        Agent program steps:
+    \begin{enumerate}
+        \item
+            TELL knowledge base what is perceived
+        \item
+            ASK knowledge base what action should be performed
+        \item
+            TELL knowledge base which action was chosen and execute the action 
+    \end{enumerate}
+\end{itemize}
+
+\subsection{The Wumpus World}
+... (Only motivation, why logical agents are lit af)
+
+\subsection{Logic} 
+\begin{itemize}
+    \item 
+        Sentences are expressed according to the \textbf{syntax} of the representation language, which specifies all the sentences that are well formed
+    \item
+        A logic must also define the \textbf{semantics} or meaning of setences (the truth of each sentence with respect to each possible world), every sentence must either be true or false in standard logic
+    \item
+        Possible world/\textbf{model}: "assignment of real numbers to the variables"
+    \item
+        If a sentence $\alpha$ is true in model $m$, we say that $m$ satisfies $\alpha$ or somtimes $m$ is a model of $\alpha$
+    \item
+        \textbf{Entailment}: a sentence follows logically from another sentence. Notation: $\alpha \vDash \beta$
+    \item
+        \textit{Formally}: $\alpha \vDash \beta$ if and only if, in every model in which $\alpha$ is true, $\beta$ is also true. Notation $\alpha \vDash \beta$ if and only if $M(\alpha) \subseteq M(\beta)$
+    \item
+        \textbf{Model checking}: enumerate all possible models to check that $\alpha$ is true in all models in which \textit{KB} is true, that is, that $M(KB) \subseteq M(\alpha)$
+    \item
+        "Set of all consequences of $KB$ is a haystack, $\alpha$ is a needle. Entailment is like the needle being in the haystack; inference is finding it"
+    \item
+        If an inference algorithm $i$ can derive $\alpha$ from $KB$, we write $KB \vdash_{i} \alpha$ ("$\alpha$ is derived from $KB$ by $i$")
+    \item
+        An inference algorithm that derives only entailed sentences is calles \textbf{sound} or \textbf{truthpreserving}
+    \item
+        An inference algorithm is \textbf{complete} if it can derive any sentence that is entailed
+\end{itemize}
+
+\subsection{Propositional Logic: A Very Simple Logic}
+\begin{itemize}
+    \item
+        
+\end{itemize}
+
+\end{document}
