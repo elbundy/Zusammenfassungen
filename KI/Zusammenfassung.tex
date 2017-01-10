@@ -1,7 +1,10 @@
 \documentclass{scrartcl}
 
+\usepackage{hyperref}
 \usepackage{amssymb}
 \usepackage{mathtools}
+
+\newcommand{\ffrac}[2]{\ensuremath{\frac{\displaystyle #1}{\displaystyle #2}}}
 
 \begin{document}
 
@@ -58,7 +61,102 @@
 \subsection{Propositional Logic: A Very Simple Logic}
 \begin{itemize}
     \item
-        
+        \textbf{Atomic Sentences} consist of a single \textbf{proposition symbol} (e.g. P, Q, R, ...)
+    \item
+        Two proposition symbols with fixed meaning: \textit{True} is the always-true proposition, \textit{False} the always-false proposition 
+    \item
+        \textbf{Logical connectives}:
+    \begin{itemize}
+        \item
+            $\lnot$: negation 
+        \item
+            $\land$: conjunction
+        \item
+            $\lor$: disjunction
+        \item
+            $\Rightarrow$: implication (premise and conclusion, if-then). A $\Rightarrow$ B is true, unless A is true and B is false.
+        \item
+            $\Leftrightarrow$: if and only if. A $\Leftrightarrow$ B is true, if A and B are both true or both false. 
+    \end{itemize} 
+    \item
+        In propositional logic, a model simply fixes the truth value for every proposition symbol, e.g. $m_{1} = \{P_{1,2} = false, P_{2,2} = true, ...\}$ 
+    \item
+        Propositional entailment is co-NP-complete (probably not easier than NP-complete), so every known inference algorithm for propositional logic has a worst-case complexity that is exponential in the size of the input
+\end{itemize}  
+
+\subsection{Propositional Theroem Proving}
+\begin{itemize}
+    \item
+        If the number of models is large, but the length of the proof is short, then theorem proving can be more efficient than model checking 
+    \item
+        \textbf{Logical equivalence}: Two sentences $\alpha$ and $\beta$ are logically  equivalent if they are true in the same set of models. Notation: $\alpha \equiv \beta$
+
+    \textbf{Standard logical equivalences}:
+    \label{logEqui}
+    \begin{itemize}
+        \item
+            $\alpha \Rightarrow \beta \equiv \lnot \beta \Rightarrow \lnot \alpha$
+        \item
+             $\alpha \Rightarrow \beta \equiv (\lnot \alpha \lor \beta)$
+        \item
+            $\alpha \Leftrightarrow \beta \equiv ((\alpha \Rightarrow \beta) \land (\beta \Rightarrow \alpha))$
+        \item
+            $\lnot (\alpha \land \beta) \equiv (\lnot \alpha \lor \lnot \beta)$ ($\alpha \lor \beta$ analog)
+        \item
+            $\alpha \land (\beta \lor \gamma) \equiv ((\alpha \land \beta) \lor (\alpha \land \gamma))$  ($\alpha \lor (\beta \land \gamma)$ analog)
+    \end{itemize} 
+    \item
+        Other definition: $\alpha \equiv \beta$ if and only if $\alpha \vDash \beta$ and $\beta \vDash \alpha$
+    \item
+        \textbf{Validity}: A sentence is valid if it is true in \textit{all} models (also called \textbf{tautologies})
+    \item
+        Every valid sentence is logically equivalent to \textit{True}
+    \item
+        \textbf{Deduction theorem}: \textit{For any sentences $\alpha$ and $\beta$, $\alpha \vDash \beta$ if and only if the sentence $(\alpha \Rightarrow \beta)$ is true in every model}
+    \item
+        \textbf{Satisfiability}: A sentence is satisfiable if it is true in, or satisied by, some model
+    \item
+        \textit{$\alpha \vDash \beta$ if and only if the sentence $(\alpha \land \lnot \beta)$ is unsatisfiable)} ("proof by contradiction", assumption that $\beta$ to be false leads to a contradiction with known axioms $\alpha$)
 \end{itemize}
 
+\subsubsection{Inference and proofs}
+\begin{itemize}
+    \item
+        \textbf{Modus Ponens}: $\ffrac{\alpha \Rightarrow \beta, \; \alpha}{\beta}$
+    \item
+        \textbf{And-Elimination}: $\ffrac{\alpha \land \beta}{\alpha}$
+    \item
+        All logical equivalences (\hyperref[logEqui]{Click}) can be used as inference rules, they are all \textit{sound}
+    \item
+        Finding a proof can be more efficient because the proof can ignore irrelevant propositions, no matter how many of them there are
+    \item
+        \textbf{Monotonicity}: the set of entailed sentences can only increase as information is added to the knowledge base
+    \item
+        if $KB \vDash \alpha$ then $KB \land \beta \vDash \alpha$
+    \item
+        The conclusion of the rule must follow \textit{regardless of what else is in the knowledge base}
+\end{itemize}
+
+\subsubsection{Proof by resolution}
+\begin{itemize}
+    \item
+        Search algorithms with inadequate number of available inference rules are not \textit{complete} 
+    \item
+        \textbf{unit resolution} inference rule: $\ffrac{l_{1} \lor \dots \lor l_{k}, \;\;\; m}{l_{1} \lor \dots \lor l_{i-1} \lor l_{i+1} \lor \dots l_{k}}$
+        where $l_{i}$ and $m$ are \textbf{complementary literals} (one is the negation of the other)
+    \item
+        Takes a \textbf{clause} - a disjunction of literals - and a literal and produces a new clause. Note that a single literal can be viewed as a disjunction of one literal, also known as a \textbf{unit clause}
+    \item
+        \textbf{full resolution} rule: $\ffrac{l_{1} \lor \dots \lor l_{k}, \;\;\; m_{1} \lor \dots \lor m_{n}}{l_{1} \lor \dots \lor l_{i-1} \lor l_{i+1} \lor \dots \lor l_{k} \lor m_{1} \lor \dots \lor m_{j-1} \lor m_{j+1} \lor \dots \lor m_{n}}$
+        where $l_{i}$ and $m_{j}$ are complementary literals
+    \item
+        The resulting clause should contain only one copy of each literal. The removal of multiple copies of literals is called \textbf{factoring}
+    \item
+        \textit{Soundness of resolution}: When $l_{i}$ true, then $m_{j}$ false, and hence $m_{1} \lor \dots \lor m_{j-1} \lor m_{j+1} \lor \dots \lor m_{n}$ must be true.
+        If $l_{i}$ false, then $l_{1} \lor \dots \lor l_{i-1} \lor l_{i+1} \lor \dots \lor l_{k}$ must be true. Now, $l_{i}$ is either true or false, so one or other of these conclusions holds - exactly as the resolution rule states.
+    \item
+        \textit{A resolution-based theroem prover can, for any sentences $\alpha$ and $\beta$ in propositional logic, decide whether $\alpha \vDash \beta$}.
+\end{itemize}
+
+\subsubsection{Conjunctive normal form}
 \end{document}
