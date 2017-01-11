@@ -159,4 +159,112 @@
 \end{itemize}
 
 \subsubsection{Conjunctive normal form}
+\begin{itemize}
+    \item
+        Resolution rule only applies to clauses (disjunctions of literals)
+    \item
+        \textit{But:} Every sentence of propositional logic is equivalent to a conjunction of clauses (\textbf{conjunctive normal form, CNF})
+\end{itemize}
+Converting a sentence (e.g. $B_{1,1} \Leftrightarrow (P_{1,2} \lor P_{2,1})$) into \textbf{CNF}:
+\begin{enumerate}
+    \item
+        Eliminate $\Leftrightarrow$, replacing $\alpha \Leftrightarrow \beta$ with $(\alpha \Rightarrow \beta) \land (\beta \Rightarrow \alpha)$
+
+        $(B_{1,1} \Rightarrow (P_{1,2} \lor P_{2,1})) \land ((P_{1,2} \lor P_{2,1}) \Rightarrow B_{1,1})$
+    \item
+        Eliminate $\Rightarrow$, replacing $\alpha \Rightarrow \beta$ with $\lnot \alpha \lor \beta$
+
+        $(\lnot B_{1,1} \lor P_{1,2} \lor P_{2,1}) \land (\lnot (P_{1,2} \lor P_{2,1}) \lor B_{1,1})$
+    \item
+        CNF required $\lnot$ to appear only in literals, so we "move $\lnot$ inwards" by repeated application of the following equivalences:
+
+        $\lnot(\lnot \alpha) \equiv \alpha$
+
+        $\lnot(\alpha \land \beta) \equiv (\lnot \alpha \lor \lnot \beta)$
+
+        $\lnot(\alpha \lor \beta) \equiv (\lnot \alpha \land \lnot \beta)$
+
+        In the example:
+        $(\lnot B_{1,1} \lor P_{1,2} \lor P_{2,1}) \land ((\lnot P_{1,2} \land \lnot P_{2,1}) \lor B_{1,1})$
+
+    \item
+        Eliminate nested $\lor$ and $\land$ operators by applyingdistributivity law
+
+        $(\lnot B_{1,1} \lor P_{1,2} \lor P_{2,1}) \land (\lnot P_{1,2} \lor B_{1,1}) \land (\lnot P_{2,1} \lor B_{1,1,})$
+\end{enumerate}
+
+\subsubsection{A resolution algorithm}
+\begin{itemize}
+    \item
+        To show that $KB \vDash \alpha$, we show that $(KB \land \lnot \alpha)$ is unsatisfiable
+\end{itemize}
+\textit{PL-Resolution Algorithm}:
+\begin{enumerate}
+    \item
+        Convert $(KB \lor \lnot \alpha)$ into CNF
+    \item
+        Apply resolution rule to the resulting clauses. Each pair that contains complementary literals is resolved to produce a new clause, which is added to the set if not already present
+    \item
+        The process continues until one of two things happens:
+
+        1) there are no new clauses that can be added, so $KB$ does not entail $\alpha$
+        
+        2) two clauses resolve to yield the empty clause, so $KB$ entails $\alpha$
+\end{enumerate}
+\begin{itemize}
+    \item
+        The empty clause - a disjunction of no disjuncts - is equivalent to \textit{False}
+\end{itemize}
+
+\textit{Completeness:}
+\begin{itemize}
+    \item
+        \textbf{Resolution closure }\textit{RC(S)} of a set of clauses $S$: set of all clauses derivable by repeated application of the resolution rule to clauses in $S$ or their derivatived
+    \item
+        \textbf{Ground resolution theorem:} If a set of clauses is unsatisfiable, then the resolution closure of those clauses conteins the empty clause.
+\end{itemize}
+
+\subsubsection{Horn clauses and definite clauses}
+\begin{itemize}
+    \item
+        Some real-world knowledge bases satisfy certain restrictions on the form of sentences they contain, which enables them to use a more restricted and efficient inference algorithm
+    \item
+        \textbf{definite clause:} disjunction of literals of which exactly one is positive, e.g. $(\lnot L_{1,1} \lor \lnot Breeze \lor B_{1,1})$
+    \item
+        \textbf{Horn clause:} disjunction of literals of which at most one is positive (so all definite clauses are Horn clauses, as are clauses with no positive literals (so called \textbf{goal clauses}))
+    \item
+        Horn clauses are closed under resolution: if you resolve two Horn clauses, you get back a Horn clause
+\end{itemize}
+Knowledge bases only containing definite clauses are interesting for three reasons:
+\begin{enumerate}
+    \item
+        Definite clauses can be written as implications, whose preimse is a conjunction of positive literals and whose conclusion is a single positive literal. A sentence consisting of a single positive literal, such as $L_{1,1}$ is called a fact, it too can be written in implication form as $True \Rightarrow fact$
+    \item
+        Inference with Horn clauses can be done through the \textbf{forward-chaining} and \textbf{backward-chaining} algorithms (basis for \textbf{logic programming}
+    \item
+        Deciding entailment with Horn clauses can be done in time that is linear in the size of the knowledge base
+\end{enumerate}
+
+\subsubsection{Forward and backward chaining}
+\begin{itemize}
+    \item
+        Forward chaining: begins from known facts (positive literals) in the knowledge base. If all the premises of an implication are known, then its conclusion is added to the set of known facts. This process continues until the query $q$ (a single propositional symbol) is added or until no further inferences can be made
+    \begin{itemize}
+        \item
+            \textbf{Sound:} Every inference is essentially an application of Modus ponens
+        \item
+            \textbf{Complete:} Every entailed atomic sentence will be derived
+    \end{itemize}
+    
+    \item
+        Forward chaining is an example of the general concept of \textbf{data-driven} reasoning - that is, reasoning in which the focus of attention start with the known data.
+    \item
+        Backward chaining: works backwards from the query. If all the premesis of one of the implications whose conclusion is $q$ can be proven true, then $q$ is true.
+    \item
+        \textbf{goal-directed reasoning}. It is useful for answering specific questins such as "What shall I do now?" and "Where are my keys?".
+    \item
+        Both run in linear (often less) time
+\end{itemize}
+
+\subsection{Effective Propositional Model Checking}
 \end{document}
