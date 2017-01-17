@@ -8,12 +8,21 @@
 
 \begin{document}
 \section{First-Order Logic}
-\subsubsection{Syntax and Semantics}
+\subsection{Syntax and Semantics}
 \begin{itemize}
     \item
-        First-order signature
+        First-order signature:
         \begin{itemize}
-                
+            \item
+                connectives: $\sum^{0} = \{T, F, \lnot, \lor, \land, \Rightarrow, \Leftrightarrow, \dots\}$ (functions on truth values)
+            \item
+                function constants: $\sum_{k}^{f} = \{f,g,h,\dots\}$ (functions on individuals)
+            \item
+                predicate constants: $\sum_{k}^{p} = \{p,q,r,\dots\}$ (relations among individuals)
+            \item
+                (Skolem constants: $\sum_{k}^{sk} = \{f_1^k, f_2^k, \dots\}$)
+            \item
+                We take the signature $\sum$ to ba all of these together: $\sum = \sum^{0} \bigcup \sum^f \bigcup \sum^p \bigcup \sum^{sk}$
         \end{itemize}
-\end{itemize}
+    \end{itemize}
 \end{document}
