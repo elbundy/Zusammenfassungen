@@ -1,0 +1,476 @@
+\documentclass{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{hyperref}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{gensymb}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows}
+
+\usepackage[a4paper, left=1cm, right=1cm, top=2cm, bottom=3cm]{geometry}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+\DeclarePairedDelimiter\inner{\langle}{\rangle}%
+\newcommand{\ffrac}[2]{\ensuremath{\frac{\displaystyle #1}{\displaystyle #2}}}
+
+\begin{document}
+\section*{Vorlesung 2: Einführung}
+\subsection*{Was ist Soziologie?}
+\begin{itemize}
+    \item
+        Gegenstand der Soziologie: Die ärgerliche Tatsache der Gesellschaft erzwingt und ermöglicht gemeinsames Handeln durch Gewebe aus Bedeutung, Erwartung und Verhalten in wechselseitiger Orientierung (Berger 2011, 47)
+    \item
+        Wie kommt ein Bedeutungsgewebe zustande, das gemeinsames (wechselseitiges aufeinander bezogenes) Handeln ermöglicht und erzwingt?\\
+        $\rightarrow$ Durch die kulturelle Festlegung von Erwartungen an eine soziale Position (z.B. Ärztin, Lehrerin)
+    \item
+        Soziale Positionen vermitteln keine individuellen Kentnisse der Person. Sie sind auch nicht individuell, sondern sozial (überindividuell)
+    \item
+        Typische Verhaltensweise einer Position = soziale Rolle
+    \item
+        Indem Individuen soziale Rollen spielen, entsteht \textbf{Verlässlichkeit, Dauerhaftigkeit und Erwartbarkeit} im sozialen Verkehr
+    \item
+        Positionen und Rollen sind den Individuen äußerlich (sie sind soziale Tatsachen)
+\end{itemize}
+
+\begin{itemize}
+    \item
+        Wo ist das Soziale zu verorten?
+        \begin{enumerate}
+            \item
+                Im Handeln der Individuen ($\rightarrow$ Wisschenschaft des sozialen Handelns)
+            \item
+                In der Wechselwirkung zwischen Individuen ($\rightarrow$ Wissenschaft von den sozialen Wechselwirkungen)
+            \item
+                Das Soziale tritt den Individuen als äußerer Zwang gegenüber ($\rightarrow$ Wissenschaft sozialer Institutionen)
+        \end{enumerate}
+        $\rightarrow$ Alle drei Antworten: es geht um soziale Beziehungen zwischen Menschen
+\end{itemize}
+\subsection*{Soziologisches Bewusstsein}
+\begin{itemize}
+    \item
+        Misstrauen gegenüber offiziellen Problemdefinitionen
+    \item
+        Bewusstsein für die Pluralität der sozialen Wirklichkeit
+        \begin{itemize}
+            \item
+                Abweichendes Verhalten kann aus der Perspektive einer anderen sozialen Gruppe Teil einer sinnvollen, respektablen kulturellen Praxis sein (z.B. Universitätsleben)
+        \end{itemize}
+    \item
+        Relativieung des Geltungsanspruches kultureller Normen und Werte
+        \begin{itemize}
+            \item
+                Die Entstehungs- und Geltungsbedingungen spezifischer Werte sind sinnvoller Gegenstand soziologischer Analysen, nicht aber ihre Wahrheit oder Richtigkeit
+        \end{itemize}
+\end{itemize}
+$\rightarrow$ Gesellschaftlche Konstruktion der Wirklichkeit
+
+\newpage
+
+\section*{Vorlesung 3: Verhalten, Handeln, soziales Handeln, Normen}
+\begin{itemize}
+    \item
+        soziale Institution: In der Soziologie versteht man unter Institutionen soziale Einrichtungen, die das Handeln der Menschen grundlegend bestimmen. Sie schränken Willkür und Beliebigkeit ein und geben den Menschen Verhaltenssicherheit (Handlungskompetenz). Institutionen in diesem Sinne sind zum Beispiel Familie, die Marktwirtschaft, das schulische Bildungswesen, das Gerichtswesen (Gerichtbarkeit) oder auch die Sprache.
+\end{itemize}
+\subsection*{Verhalten, Handeln, soziales Handeln}
+\begin{itemize}
+    \item
+        Soziales Handeln: Handeln, das für den Handelnden subjektiv insofern sozial ist, als es sich auf das Verhalten anderer bezieht bzw. daran orientiert ist
+    \item
+        Handeln: Handeln ist eine Spezialform von Verhalten, nämlich subjektiv sinnhaftes Verhalten
+    \item
+        Verhalten: Jedes körperliche Geschehen in Raum und Zeit
+    \item
+        $\text{Soziales Handeln} \subset \text{Handeln} \subset \text{Verhalten}$
+\end{itemize}
+\subsection*{Handeln}
+\begin{itemize}
+    \item
+        Handeln ist Verhalten mit subjektiv gemeintem Sinn (mit Motiven ausgestattet)
+    \item
+        Erfolgt in einer Situation (ist gerahmt)
+    \item
+        Es verfolgt ein Ziel und setzt zur Zielverfolgung intentionelle Mittel ein
+    \item
+        Hat intendierte und nicht intendierte Folgen
+    \item
+        Handeln wählt zwischen Alternativen
+    \item
+        Der Sinn einer Handlung wird von anderen gedeutet (interpretiert)
+\end{itemize}
+\subsection*{Soziales Handeln}
+\begin{itemize}
+    \item
+        Soziales Handeln ist der Intention nach auf das Verhalten anderer gerichtet, dadurch in seinem Ablauf mitbestimmt und aud dieser Intention und Bestimmung des Handelns heraus versändlich erklärbar
+    \item
+        Die Sinnorientierungen des Handelns werden gesellschaftlich mitgeprägt (Wieso begrüßt man sich? $/rightarrow$ macht man hald so)
+    \item
+        Gesellschaftlicher Wandel ist über den Wandel der Sinnorientierung des Handelns erfassbar
+\end{itemize}
+\subsection*{Sinnorientierung sozialen Handelns}
+\begin{itemize}
+    \item
+        Traditional: Sitten und Gebräuche (z.B. Heirat aus Tradition)
+    \item
+        Affektuell: Emotionen (z.B. Liebesheirat)
+    \item
+        Wertrational: Bewusster Glaube an den ethischen/religiösen etc. Eigenwert eines Sichtverhaltens, unabhängig vom Erfolg (z.B. Heirat weil persönliches erstrebenswertes Ideal)
+    \item
+        Zweckrational: Ausschließlich orientiert an als adäquat vorgestellten Mitteln für eindeutig erfasste Zwecke (z.B. Heirat um Steuern zu sparen)
+    \item
+        \textbf{Ideelle Typen, empirisch treten die Typen nicht rein auf}
+\end{itemize}
+
+\subsection*{Gesellschaft als sinnhafter Handlungszusammenhang}
+\begin{itemize}
+    \item
+        Gesellschaft basiert auf individuellem Verhalten
+    \item
+        Verhalten weist Spielräume auf
+    \item
+        Konkretes Verhalten ist Folge einer Entscheidung
+    \item
+        Verhaltensselektion ist sozial mitbestimmt (nur sozial akzeptiertes Verhalten wird gezeigt)
+\end{itemize}
+
+\subsection*{Kritik an der Weberschen Handlungstypologie}
+\begin{itemize}
+    \item
+        Check ich nicht
+\end{itemize}
+
+\subsection*{Pattern Variables (Talcott Parsons)}
+\begin{itemize}
+    \item
+        Instrument für die strukturfunktionalistische Analyse einer Handlung
+    \item
+        Fünf dichotome Entscheidungsalternativen, zwischen denen ein Individuum bei der Handlung bewusst oder unbewusst wählen muss
+        \begin{enumerate}
+            \item
+                Affektivität versus affektive Neutralität: Ist die Handlung von Gefühlen abhängig, oder ist es eine Handlung, die weitestgehend frei von Emotionen ist? Oft wird diese Variable auch als Wahl zwischen unmittelbarer Bedürfnisbefriedigung oder der Befriedigung eines langfristigen Bedürfnisses gesehen.
+            \item
+                Universalismus versus Partikularismus: Eine Handlung kann anhand dieser Variablen danach analysiert werden, ob die Norm dieser Handlung (laut Parsons wohnt jeder Handlung eine Norm inne) auf alle Personen anwendbar ist, oder nur für eine bestimmte Person oder Personengruppe gilt.
+            \item
+                Zuschreibung versus Leistung: Anhand dieser Variablen kann eine Handlung danach analysiert werden, ob sie gegenüber einer anderen Person oder Personengruppe aufgrund von Zuschreibung vorgenommen wurde, oder aufgrund von Leistungen und Verdiensten, die diese Person(en) erworben haben.
+            \item
+                Diffusität versus Spezifität: Alternative zwischen Handlungen, die auf die ganze Person (z.B. Familienvater: Rolle als Versorger, Erzieher, liebender Vater) und solchen, die auf spezielle Segmente, d. h. einzelne, klar definierte „Teile“ (Rollen) des Individuums bezogen sind (z.B. als Heizungsmonteur).
+            \item
+                Selbstorientierung versus Kollektivorientierung: Alternative zwischen Eigeninteressen (Eigennutz) und dem Bezug auf das Kollektivwohl (Gemeinnutz).
+        \end{enumerate}
+\end{itemize}
+
+\subsection*{Normen}
+\begin{itemize}
+    \item
+        Normen sind soziale (also überindividuelle) Festlegungen der Bedeutungen von Verhalten in einer Situation, sie legen unsere Erwartung an das Verhalten anderer fest
+    \item
+        Verbindlichkeitesgrade von Normen:
+        \begin{center}
+            \begin{tabular} { c | c | c | c }
+                \hline
+                Art der Erwartung & Positive Sanktion & Negative Sanktion & \\ \hline
+                Muss & - & Gericht & Gesetz (Steuern zahlen)\\ \hline
+                Soll & (Gratifikation) & Ausschluss & Sitte (Flirtregeln) \\ \hline
+                Kann & Schätzung & (Antipathie) & Gewohnheit (Hilfsbereitschaft) \\ 
+                \hline
+            \end{tabular}
+        \end{center}
+    \item
+        Abweichungen liegen nicht in der Sache, sondern entstehen relativ zu Erwartungen (z.B. Sucht, Krankheit)
+    \item
+        Sanktionen Verstärken eine Norm bei ihrer Erfüllung bzw. Verletzung
+    \item
+        Nicht jede Erwartungsenttäuschung führt zur Sanktion $\rightarrow$ korrektiver Austausch
+    \item
+        \textbf{Individualisierungschancen liegen nicht in der Konformität, sondern in der Abweichung}
+    \item
+        \textbf{Werte} rahmen und legitimieren Normen 
+    \item     
+        Werte: kulturell verbreitete Vorstellung des Wunschbaren, Erstrebenswerten, Wertvollen.
+    \item
+        Werte definieren ein allgemeines Ziel und geben eine Orientierung, sie legen kein konkretes Handeln fest
+        \begin{center}
+            \begin{tabular} { c | c | c }
+                \hline
+                Werte/Ziele akzeptiert & Normen/Mittel akzeptiert & Anpassungsmuster \\ \hline
+                Ja & Ja & Konformismus \\ \hline
+                Ja & Nein & Innovation \\ \hline
+                Nein & Ja & Ritualismus \\ \hline
+                Nein & Nein & Apatie und Rückzug \\ \hline
+                Alternativ & Alternativ & Rebellion \\
+                \hline
+            \end{tabular}
+        \end{center}
+\end{itemize}
+\subsection*{Culture of Poverty}
+\begin{itemize}
+    \item
+        Behauptung: in Subkulturen werden Werte vermittelt, die nicht denen der dominanten Kultur entsprechen (sog. Armutskulturen)
+    \item
+        In Folge dessen orientieren sich Jugendliche aus den Subkulturen nicht an den gesellschaftlich zur Verfügung gestellten Mitteln (etwa Bildungsangebote), weil sie nicht dieselben Ziele anstreben
+    \item
+        Gegenbehauptung: Jugendliche favorisieren dieselben Werte, sozial akzeptierte Mittel um diese Ziele zu erreichen sind jedoch unvertraut $\rightarrow$ Kultur-Schock Erfahrungen, Reorientierung des Verhaltens auf kulturelle Milieus der Vertrautheit
+\end{itemize}
+
+\subsection*{Fazit}
+\begin{itemize}
+    \item
+        Handeln: Folge von Abwägung und dadurch versteh- und gestaltbar
+    \item
+        Handeln hat Folgen und Nebenfolgen, Handeln orientiert sich an Normen
+    \item
+        Normen machen unser Handeln und das der anderen erwartbar, sie sind uns im Wissen präsent
+    \item
+        Norm und Abweichung sind wechselseitig aufeinander bezogene Begriffe
+    \item
+        Abweichendes Verhalten ist wichtige Quelle sozialen Wandels
+    \item
+        Anerkannte Ziele fördern auch abweichende Strategien ihres Erreichens, wenn die anerkannten Mittel vorenthalten werdern
+    \item
+        Werte wirken nicht nur integrativ, sondern auch ausschließend (Christliche Werte $\Rightarrow$ fordern Bekenntnis)
+\end{itemize}
+
+\newpage
+
+\section*{Vorlesung 4: Integration, Kommunikation}
+\subsection*{Normen und Interaktionskrisen}
+\begin{itemize}
+    \item
+        Normen regulieren in Situationen Erwartungen an das eigene Verhalten und das Verhalten anderer. Viele solcher Normen sind uns selbstverständlich, wir befolgen sie als gehörten sie zu unserer Natur (gerade basale Integrationsnormen wie Grüßen)
+    \item
+        Durch Verletzung der Normen und Analyse der Reaktionen kann Wichtigkeit erkannt werden (je heftiger Reaktion, desto basaler die Norm) $\rightarrow$ Krisenexperiment
+    \item
+        Krisenexperiment: situatives unangemessenes Verhalten = bewusstes Stören der Basisregel der Interaktion $\rightarrow$ Akteure reagieren mit Versuchen der Normalisierung der Situation
+    \item
+        Wie regulieren Werte/Normen Interaktionen?
+        \begin{itemize}
+            \item
+                Parson: Werte und Normen werden im Prozess der Sozialisation verinnerlich (einfacher Beleg: Schuldbewusstsein)
+            \item
+                Was folgt daraus für die Regulierung von Interaktionen? $/rightarrow$ Dass man kulturen Normen folgt, weil man sie verinnerlicht hat (stimmt nur halb)
+            \item
+                Interaktionistische Perspektive auf soziale Normen
+            \item
+                Beispiel Paar: Paarbeziehung folgt nicht immer den gleichen Normen, am Anfang der Beziehung noch keine stabilen Normen, Paar übersetzt Normen in ihre Paarbeziehung (Aushandlungsprozess)
+        \end{itemize}
+    \item
+        Folgerung: Eine Norm gibt nicht an, wie sie angewendet wird, sie wird in Interaktionssituationen praktisch verfertigt (Kritik an Parson)
+    \item
+        Interaktionen sind Orte der Entstehung, der Anwendung und der Wandels der Normen, Werten und Institutionen
+\end{itemize}
+
+\subsection*{Interaktion}
+\begin{itemize}
+    \item
+        Definition: mind. zwei Akteure, die ihr Verhalten wechselseitig aufeinander abstimmen - mittels der symbolischen Bedeutung ihres Tuns (z.B. Handwedeln bedeutet Grüßen)
+    \item
+        Deuten des Verhaltens anderer = Situationsdefinition (z.B. Dude sitzt da und sagt nichts $\rightarrow$ traurig oder vielleicht doch nur gelangweilt?)
+    \item
+        Handlungskoordination setzt eine gemeinsame Situationsdefinition voraus
+    \item
+        Interaktionen folgen in ihrem Verlauf nicht bzw. nicht nur Absichten, sondern der Wechselwirkung zwischen den Akteuren
+    \item
+        Symbolischer Interaktionismus:
+        \begin{itemize}
+            \item
+                Wir handeln gegenüber Dingen und Anderen aufgrund von Bedeutungen derer
+            \item
+                Bedeutungen sind aus sozialen Interaktionen mit Mitmenschen abgeleitet, in denen sie durch das Handeln definiert werden
+            \item
+                Bedeutungen werden in einem interpretativen Prozess gehandhabt und verändert
+            \item
+                Bedeutung ist keine immanente Qualität, sondern ein Produkt der Interaktion im Umgang mit den Dingen und Menschen
+            \item
+                Interaktion: Austausch von Gesten und Symbolen zwischen mehreren Individuen, die miteinander und aufeinander bezogen handeln
+        \end{itemize}
+    \item
+        Thomas-Theorem: \textit{if men define situations as real, they are real in their consequences} (Situationsdefinition, Orientierung des Handelns an der Definition, Reale Konsequenzen), Self fullfilling prophecy
+\end{itemize}
+\subsection*{Kommunikation}
+\begin{itemize}
+    \item
+        Interaktion: Austausch von Gesten und Symbolen zwischen mehreren Individuen, die miteinander und aufeinander bezogen handeln
+    \item
+        Symbol: Zeichen, dessen Bedeutung geteilt wird (Kommunikative Welt = symbolische Welt)
+    \item
+        Kommunikation: menschliche Verhaltensabstimmung mittels symbolischer Mittel, die in soziale Praktiken eingebettet sind (Reichertz)\\
+    \item
+        Kommunikation ist aus drei Gründen nach Luhmann unwahrscheinlich:
+        \begin{itemize}
+            \item
+                Jeder versteht die Welt auf der Grundlage seiner individuellen Biografie und deshalb anders als ein anderer (Unwahrscheinlichkeit des Verstehens)
+            \item
+                Dass eine Kommunikation mehr Personen erreicht, als in einer Situation anwesend sind, ist unwahrscheinlich (Unwahrscheinlichkeit des Erreichens Abwesender)
+            \item
+                Dass ein Adressat eine Mitteilung als Prämisse seines Verhaltens übernimmt, ist unwahrscheinlich (Unwahrscheinlichkeit der Annahme)
+        \end{itemize}
+    \item
+        Luhmanns Antwort: Die Unwahrscheinlichkeit wird reduziert durch Kommunikationsmedien
+    \item
+        Kommunikation setzt Hör-, Sicht-, oder Spürbarkeit des kommunikativen Vorgangs voraus
+    \item
+        Kommunikationsmedien haben ein materiales Substrat (Verbreitungsmedien und Erfolgsmedien)
+    \item
+        Kommunikation = Einheit von Information, Mitteilung und Verstehen (Was gesagt wird, wie es gesagt (Kontext) wird und was ein Adressat daraus macht)
+    \item
+        Beispiel Sprache:
+        \begin{itemize}
+            \item
+                Ermöglicht Verstehen
+            \item
+                Macht Annahme der Mitteilung unwahrscheinlich
+            \item
+                Ja/Nein-Kodierung der Sprache
+            \item
+                Öffnet Raum der Kontingenz
+            \item
+                Folgerung: Der Fortgang von Kommunikation liegt nie fest (lässt sich nicht intentional von einer Seite steuern), ist aber auch nicht beliebig
+        \end{itemize}
+    \item
+        Interaktion ist an Kopräsenz gebunden, Kommunikation nicht
+    \item
+        Ergebnis: Kommunikationsmedien sind institutionalisierte (sozial verfestigte, stabile) Lösungen von Koordinationsproblemen
+\subsection*{Fazit}
+    \begin{itemize}
+        \item
+            Differnz handlungstheoretischer / interaktionistischer Perspektive auf soziale Phänomene
+        \item
+            Interaktion funktioniert auf der Grundlage geteilter Symbole (etwa: Sprache)
+        \item
+            Folgerungen: u.a. Thomas-Theorem
+        \item
+            Begriff der Interaktion verweist auf Kommunikation bzw. Kommunikationsmedien
+        \item
+            Kommunikation in Interaktionen basiert auf (geteilten) Symbolen
+        \item
+            Keine Interaktion ohne Kommunikation (umgekehrt schon)
+    \end{itemize}
+\end{itemize}
+
+\subsection*{Vorlesung 5: Institution, Organisation, kollektives Handeln}
+\begin{itemize}
+    \item
+        Handlungstheoretisch: Soziale Phänomene sind in den handelnden Akteuren zu verorten
+    \item
+        Interaktionistisch: Soziale Phänomene sind in den Wechselbeziehungen von Akteuren zu verorten
+    \item
+        Institutionalistisch: Soziale Phänomene sind unabhängig von den Akteuren und üben auf diese einen Zwang aus
+    \item
+        Beispiel Paar:
+        \begin{itemize}
+            \item
+                aus der Perspektive von A und B (Normen der Paarbeziehung werde durch Verinnerlichung handlungsleitend): Man schaut auf die einzelnen Handelnden
+            \item
+                aus der Perspektive der Wechselwirkung (Normen der Paarbeziehung werden kommunikativ ausgehandelt): Man schaut auf die Interaktion
+            \item
+                aus der Perspektive der Institutionen (Normen der Paarbeziehung besehen unabhängig von Akteuren): Man schaut auf die Normen
+        \end{itemize}
+\end{itemize}
+\subsubsection*{Institution}
+\begin{itemize}
+    \item
+        Institutionen: Sinneinheit von habitualisierten (selbst ins Verhalten übernommenen) Formen des Handelns und der sozialen Interaktion, deren Sinn und Rechtfertigung der jeweiligen Kultur entstammen und deren dauerhafte Beachtung die Gesellschaft sichert\\
+        Beispiel: Paarwerdung als Prozess der Institutionalisierung von sozialen Positionen in der Beziehung
+    \item
+        Institutionalsierung:
+        \begin{itemize}
+            \item
+                Stabilisierung von Verhaltenserwartungen und Problemlösungen (Handlungskoordination)
+            \item
+                Einschränkung der Vielfalt von Handlungsmöglichkeiten
+            \item
+                Stabilisierung sozialer Ordnungen durch Ablösung der Institution von der Person
+        \end{itemize}
+    \item
+        Folge: Das Soziale scheint uns fest wie dingliche Objekte, das Soziale scheint uns selbstverständlich
+    \item
+        Institutionen sind darauf angewiesen, dass sie im Handeln reproduziert werden
+    \item
+        Dimensionen von Institutionen:
+        \begin{itemize}
+            \item
+                Ideel (Was)
+            \item
+                Personell (Wer)
+            \item
+                Regeln und Normen 
+            \item
+                Materieller Apparat
+        \end{itemize}
+\end{itemize}
+\subsection*{Organisation}
+\begin{itemize}
+    \item
+        Im Unterschied zu Institutionen absichtlich geschaffen
+    \item
+        Verfolgen Zwecke, definieren Mitgliedschaft und bilden Hirarchien aus
+    \item
+        soziale Phänomene, keine sachlich fassbaren Gegenstände wie Autos
+    \item
+        Integrieren ihre Mitglieder nur in spezifischen, von Personen unabhängigen Funktioinen, nicht als ganze Person
+    \item
+        Moderne Sozialordnungen werden auch als Organistationsgesellschaft bezeichnet
+    \item
+        Beispiele: Wirtschaftsbetriebe, Schulen, Hochschulen, Krankenhäuser, Parteien, Vereine, Kirchen, Gerichte, Staaten, ...
+    \item
+        Nach Parson: wichtigster Mechanismus für eine hochdifferenzierte Gesellschaft, um das System in Gang zu halten und Ziele zu verwirklichen, die die Möglichkeiten des einzelnen übersteigen
+    \item
+        Ziehen eine Grenze zwischen sich und ihrer Umwelt, bauen intern Komplexität auf um mit ihrer Umwelt umgehen zu können. Das tun sie durch funktionale Spezialisierung und Hirarchieaufbau
+    \item
+        Eigenlogik von Organisationen:
+        \begin{itemize}
+            \item
+                Parkinsons Gesetz (erklärt das beständige Wachsten von Bürokratie)
+                \begin{itemize}
+                    \item
+                        Angstellte wünschen, die Zahl ihrer Untergebenen, nicht die Zahl ihrer Konkurrenten zu vermehren
+                    \item
+                        Angstellte schaffen sich gegenseitig Arbeit
+                \end{itemize}
+            \item
+                Ergebis am Beispiel staatlicher Verwaltung: hohe interne Rationalität, die von Außen betrachtet nur Kopfschütteln auslösen kann
+        \end{itemize}
+    \item
+        Mitgliedschaft:
+        \begin{itemize}
+            \item
+                Herstellung von Konformität (Anerkennung von Organisationsregeln bei Beitritt, Ausschluss bei Nichtanerkennung) $\rightarrow$ Entkopplung subjektiver und organisationaler Motivlagen
+            \item
+                Formalisierung der Erwartungen an die Mitglieder = notwendiger Mechanismus, der die Erwartungen der Organisation für Mitglieder sichtbar macht (aber nicht alles kann formalisiert werden)
+            \item
+                Indifferenzzonen (unklar ob Erwartung noch im Rahmen ist oder nicht)
+            \item
+                Motivation von Mitgliedern (Materielle Anreize, Zwang, Attraktive Tätigkeit, ...)
+            \item
+                Gegenwart: Verflüssigung von Organisationsgrenzen infolge uneindeutiger Mitgliedschaftsregeln (z.B. Leiharbeit)
+        \end{itemize}
+    \item
+        Zwecke:
+        \begin{itemize}
+            \item
+                Ermöglichen Organisationen ein vereinfachtes Bild ihrer Umwelt
+            \item
+                In der Regel Zwecke nicht so eindeutig
+            \item
+                Formulierte Zwecke stellen vor allem Akzeptanz her (z.B. nachhaltig wirtschaften)
+    \item
+        Hirarchien:
+            \begin{itemize}
+                \item
+                    Zur Selbststeuerung
+                \item
+                    Akzeptanz der Hirarchie ist Mitgliedschaftsbedingung (ermöglicht Handlungskoordination und (unpopuläre) Entscheidungen)
+                \item
+                    Unterschiedliche Kompetenzen auf unterschiedlichen Ebenen (Sachkompetenz in der Regel unten)
+                \item
+                    Formelle und informelle Kommunikationswege
+                \item
+                    Gegenwart: Kritik und Wandel von Organisationshirarchien
+            \end{itemize}
+        \end{itemize}
+\end{itemize}
+\end{document}
