@@ -215,4 +215,119 @@ Key Idea: Compare signal with sinusoids of various frequencies and phases.
         \textbf{Spectrogram}: two-dimensional representation of the squared magnitude of the STFT
         $$Y(m,k) = \abs{X(m,k)}^2$$
 \end{itemize}
+
+\newpage
+
+\section{Music Synchronization}
+\begin{itemize}
+    \item
+        Task: For a given position in one representation of a piece of music, determine the corresponding position within another representation (audio, midi or sheet music in general)
+    \item
+        Two main steps:
+        \begin{enumerate}
+            \item
+                Transform the two representations into sequence of suitable feature vectors\\
+                (large degree of robustness to variations that are to be left unconsidered for the task at hand vs. capture enough characteristic information to accomplish the given task) $\rightarrow$ chroma-based features
+            \item
+                Bring derived feature sequences into temporal correspondence
+        \end{enumerate}
+\end{itemize}
+\subsection*{Dynamic Time Warping}
+\begin{itemize}
+    \item
+        Two chroma vector sequences $X = (x_1, x_2, \dots, x_N)$ and $Y = (y_1, y_2, \dots, y_M)$
+    \item
+        Goal: find non-linear alignment between the elements of the two sequences in order to compensate differences in tempo
+    \item
+        Can be achieved by skipping certain elements of a sequence or by using ceratin elements more than once
+\end{itemize}
+\subsubsection*{Basic Approach}
+\begin{itemize}
+    \item
+        local cost measure or distance measure $c:\mathcal{F} \times \mathcal{F} \rightarrow \mathbb{R}$     
+        \begin{itemize}
+            \item
+                Euclidian distance: $\norm{x - y}$
+            \item
+                Cosine distance: $1 - \ffrac{\inner{x, y}}{\norm{x} \cdot \norm{y}}$\\
+                Inner product corresponds to cosine of angle between vectors $x$ and $y$\\
+                Comparison only considers the energy distributions across the twelve chroma bands and disregards actual local energy\\
+                Can be computed efficiently using a simple matrix multiplication
+        \end{itemize}
+    \item
+        Evaluating the local cost measure for each par of elements in $X$ and $Y$, one obtains a cost matrix $C \in \mathbb{R}^{N \times M}$ defined by
+        $C(n,m) = c(x_n, y_m)$
+    \item
+        Goal: find 'valley' of low cost within the cost matrix $C$
+\end{itemize}
+\subsubsection*{Warping Path}
+\begin{itemize}
+    \item
+        $(N,M)$-warping path of length $L$ is a sequence $P=(p_1, ..., p_L)$ with $p_l = (n_l, m_l)$ satisfying the following three conditions:
+        \begin{enumerate}
+            \item
+                Boundary condition: $p_1 = (1,1)$ and $p_L = (N,M)$
+            \item
+                Monotonicity condition: $n_1 \leq n_2 \leq \dots \leq n_L$ and $m_1 \leq m_2 \leq \dots \leq m_L$
+            \item
+                Step size condition: $p_{l+1} - p_l \in \{(1,0), (0,1), (1,1)\}$
+        \end{enumerate}
+        (3. implies 2.)
+    \item
+        Warping path assigns element $x_{n_l}$ to element $y_{n_l}$
+\end{itemize}
+\subsection*{Optimal Warping Path and DTW Distance}
+\begin{itemize}
+    \item 
+        total cost $c_P(X,Y)$ of a warping path $P$ between two sequences $X$ and $Y$ with respects to the local cost measure $c$ is defined as
+        $$c_P(X,Y) = \sum_{l=1}^{L}c(x_{n_l}, y_{m_l}) = \sum_{l=1}^{L} C(n_l, m_l)$$
+    \item
+        DTW distance is defined as the total cost of an optimal $(N,M)$-warping path $P^*$:
+        $$DTW(X,Y) = c_{P^*}(X,Y) = min\{c_P(X,Y)|\text{P is an (N,M)-warping path}\}$$
+    \item
+        there may be multiple optimal warping paths, e.g. when cost matrix is zero everywhere
+\end{itemize}
+
+\subsection*{Dynamic Programming Algorithm}
+\begin{itemize}
+    \item
+        Naive approach: compute all possible warping paths and then take minimal cost one
+    \item
+        Problem: Number of different $(N,M)$-warping paths is exponential in $N$ and $M$
+    \item
+        Better: Dynamic Programming with $O(NM)$ complexity
+    \item
+        Basic idea is to break down problem into simpler subproblems and then to combine the solutions
+    \item
+        Here this means to find optimal warping paths for truncated subsequences of $X$ and $Y$ \\
+    \item
+        $X(1:n) = (x_1, \dots, x_n)$, $Y(1:m) = (y_1, \dots, y_m)$ and $D(n,m) = DTW(X(1:n), Y(1:m))$
+    \item
+        Matrix $D$ is called accumulated cost matrix
+    \item
+        Recursive computation:
+        $$D(n,1) = \sum_{k=1}^n C(k,1) \text{for } n \in [1:N]$$
+        $$D(1,m) = \sum_{k=1}^m C(1,k) \text{for } n \in [1:N]$$
+        $$D(n,m) = C(n,m) + min \{D(n-1, m-1), D(n-1,m), D(n, m-1)\}$$
+        for $n\in[2:N]$ and $m\in[2:M]$\\
+        Proof: See book
+    \item
+        Computing $D$ has complexity $O(NM)$
+    \item
+        Finding optimal warping path: Start with $q_1=(N,M)$ and continue following until $q_L = (1,1)$ reached:
+        \begin{itemize}
+            \item
+                $q_{l+1} = (1, m-1) \text{if } n=1$
+            \item
+                $q_{l+1} = (n-1, 1) \text{if } n=1$
+            \item
+                $q_{l+1} = argmin\{D(n-1,m-1), D(n-1, m), D(n,m-1)\}$
+        \end{itemize}
+    \item
+        Problem: still infeasible for large $N$ and $M$
+    \item
+        Better: Global constraints (Limit region where optimal warping path can be), Multiscale approach
+
+
+\end{itemize}
 \end{document}
