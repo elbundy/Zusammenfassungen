@@ -555,4 +555,175 @@ Key Idea: Compare signal with sinusoids of various frequencies and phases.
 
 \subsection{Structure Features}
 TODO
+
+\newpage
+
+\section*{Tempo and Beat Tracking}
+\begin{itemize}
+    \item
+	Beat: sequence of perceived pulse positions, which are typically equally space in time and specified by the parameters phase and period
+    \item
+	Tempo: Reciprocal of beat period
+    \item
+	Common first step: estimate the positions of note onsets within the music signal (onset detection)
+\end{itemize}
+\subsection*{Onset Detection}
+\begin{itemize}
+    \item
+	All approaches have common pipeline:
+	\begin{enumerate}
+	    \item
+		Convert signal into a suitable feature representation
+	    \item
+		Application of derivative operator onto feature sequence which yields a novelty function
+	    \item
+		Peak-picking algorithm
+	\end{enumerate}
+\end{itemize}
+\subsubsection*{Energy-Based Novelty}
+\begin{itemize}
+    \item
+	Playing note often coincides with a sudden increase of the signals energy
+    \item
+	\begin{enumerate}
+	    \item
+		Amplitude squaring
+	    \item
+		Windowing
+	    \item
+		Differentiation
+	    \item
+		Half wave rectification
+	    \item
+		Peak picking
+	\end{enumerate}
+    \item
+	It can be beneficial to switch to logarithmic decibel scale (but may also amplify noise-like sound components)
+\end{itemize}
+\subsubsection*{Spectral-Based Novelty}
+\begin{itemize}
+    \item
+	$\mathcal{X}$: discrete STFT of the DT-signal $x$
+    \item
+	To detect spectral changes in the signal, one basically computes the difference between subsequent spectral vectors using a suitable distance measure $\rightarrow$ spectral-based novelty function or spectral flux
+    \item
+	Typical procedure:
+	\begin{enumerate}
+	    \item
+		To enhance weak spectral components, we apply logarithmic compression which yields\\
+		$\mathcal{Y} = \Gamma(|\mathcal{X}|) = log(1+\gamma \cdot |\mathcal{X}|)$
+	    \item
+		Compute discrete temporal derivative of the compressed spectrogram\\
+		$\Delta_{Spectral(n)} = \sum_{k=0}^{K}|\mathcal{Y}(n+1,k)-\mathcal{Y}(n,k)|_{\geq 0}$
+	    \item
+		Accumulate intensity changes per frame, which yields a novelty curve
+	    \item
+		Possible enhancement step: Apply averaging window onto signal and subtract from original (and do half wave rectification) (Subtraction of local averages, Normalization)
+	    \item
+		Peak picking
+	\end{enumerate}
+    \item
+	Multiband approach (also for energy-based novelty): Split signal into several frequency bands (e.g. 5-8), calculate novelty functions, weight and sum up
+    \item
+	Usually many spurious peaks $\rightarrow$ local thresholding
+\end{itemize}
+
+\subsection*{Tempo Analysis}
+\begin{itemize}
+    \item
+	Most automated approaches rely on two basic assumptions:
+	\begin{enumerate}
+	    \item
+		Beat positions occur at note onset positions
+	    \item
+		Beat positions are more or less equally spaced, at least for a certain period of time
+	\end{enumerate}
+\end{itemize}
+\subsubsection*{Tempogram Representation}
+\begin{itemize}
+    \item
+	Indicates for each time instance the local relevance of a specific tempo for a given music recording
+    \item
+	$\mathcal{T}(t, \tau)$ indicated the extent to which the signal contains a locally periodic pulse of a given tempo $\tau$ in a neighboorhood of time instances $t$
+    \item
+	Two steps:
+	\begin{enumerate}
+	    \item
+		Convert music signal into a novelty function
+	    \item
+		Analyze locally periodic behavior of novelty function
+	\end{enumerate}
+    \item
+	$\omega = 1/T$ and $\tau = 60 \cdot \omega$
+    \item
+	Harmonics of $\tau: \tau, 2\tau, 3\tau, ...$
+    \item
+	Subharmonics: $\tau, \tau /2, \tau /3, ...$
+    \item
+	Difference of two tempi with half or double the value is called tempo octave
+\end{itemize}
+
+\subsubsection*{Fourier Tempogram}
+\begin{itemize}
+    \item
+	$\mathcal{F}(n,\omega) = \sum_{m\in \mathbb{Z}} \Delta(m) \overline{w}(m - n) exp(-2\pi i \omega m)$
+    \item
+	Hopsize equal $H=1$
+    \item
+	Comparing signal with windowed sinusoid of frequency $\omega$
+    \item
+	$\mathcal{T}^F (n,\tau) = |\mathcal{F}(n,\tau /60)|$
+    \item
+	Fourier tempogram generally indicates tempo harmonicsl, but supresses tempo subharmonics
+\end{itemize}
+
+\subsubsection*{Autocorrelation Tempogram}
+\begin{itemize}
+    \item
+	Autocorrelation is a mathmatical tool for measuring the similarity of a signal with a time-shifted version of itself (also known as sliding inner product)
+    \item
+	Autocorellation: $R_{xx}(l) = \sum_{m \in \mathbb{Z}} x(m)x(m-l)$
+    \item
+	Maximal for $l=0$ and function that is symmetric in $l$
+    \item
+	Windowed version of novelty function: $\Delta_{w,n} (m) = \Delta (m) w(m-n)$
+    \item
+	Short-time auto corellation: $\mathcal{A}(n,l) = \sum_{m \in \mathbb{Z} \Delta (m) w(m-n) \Delta (m-l) w(m-n-l}$
+    \item
+	Zero for all but a finite number of time lag parameters
+    \item
+	Indicated tempo subharmonics, not harmonics
+    \item
+	In order to estimate global tempo value of recording: Average over time and take maximum
+\end{itemize}
+
+\subsection*{Beat and Pulse Tracking}
+\begin{itemize}
+    \item
+	Idea:
+	\begin{enumerate}
+	    \item
+		For each time position of Fourier tempogram compute maximizing tempo parameter and it's phase
+	    \item
+		Sum up all windowed sinusoids with correct phase and frequency of maximizing tempo parameter(overlap-add)
+	    \item
+		Half wave rectify
+	    \item
+		This yields PLP (predominant local pulse) function
+
+	\end{enumerate}
+    \item
+	PLP refers to strongest pulse level that is measurable in the underlying novelty function
+    \item
+	Local periodicity enhancement of the original novelty function
+    \item
+	Todo: Discussion of Properties
+\end{itemize}
 \end{document}
+
+\newpage
+
+\section*{Content-Based Audio Retrival}
+\begin{itemize}
+    \item
+\end{itemize}
