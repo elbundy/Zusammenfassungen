@@ -327,7 +327,232 @@ Key Idea: Compare signal with sinusoids of various frequencies and phases.
         Problem: still infeasible for large $N$ and $M$
     \item
         Better: Global constraints (Limit region where optimal warping path can be), Multiscale approach
-
-
 \end{itemize}
+
+\newpage
+
+\section{Music Structure Analysis}
+\begin{itemize}
+    \item
+        Musical parts of popular music: intro, chorus, verse, ...
+    \item
+        Goal: divide a given music representation into temporal segments that correspond to musical parts and to group these segments into musically meaningful categories (find and understand the relationship between the segments)
+    \item
+        Musical structure is related to:
+        \begin{itemize}
+            \item
+                Repetition, e.g. recurring patterns of rythmic, harmonic or melodic nature
+            \item
+                Homogenity, e.g. consistent timber, presence of specific instrument or usage of certain harmonies
+            \item
+                Novelty (Neuheit): e.g. segment boundaries go along with sudden changes in musical properties such as tempo, dynamics or the musical key
+        \end{itemize}
+        $\rightarrow$ \textbf{repetition-based}, \textbf{novelty-based} and \textbf{homogenity-based} methods
+    \item
+        First step: transform the given music recording into a suitable feature representation (trade-off between robustness and expressiveness)
+    \item
+        Feature types:
+        \begin{itemize}
+            \item
+                chroma features: harmonic and melodic properties
+            \item
+                mel-frequency cepstral coefficients (MFCCs): instrumentation and timber
+            \item
+                beat-synchronous features, tempogram: beat and tempo (and rythm)
+        \end{itemize}
+\end{itemize}
+\subsection*{Self-Similarity Matrices}
+\begin{itemize}
+    \item
+        Idea: Convert musical recording into sequence of feature vectors and compare each element with all other elements of the sequence
+    \item
+        Result: Self-Similarity Matrix (SSM)
+    \item
+        One crucial property of SSMs is that repetitions typically yield path-like structures, whereas homogeneous regions yield block-like structures\\
+    \item
+        Similarity measure $s:\mathcal{F} \times \mathcal{F} \rightarrow \mathbb{R}$
+        \begin{itemize}
+            \item
+                simple measure is absolute value of inner product: $s(x,y) = |\inner{x,y}|$
+            \item
+                if feature vectors are normalized with respects to the Euclidian norm, $s(x,y) \in [0,1]$
+        \end{itemize}
+    \item
+        N-square \textbf{self-similarity matrix} $S\in \mathbb{R}^{N\times N}$ defined by $S(n,m) = s(x_n, x_m)$
+    \item
+        Diagonal with high values
+    \item
+        Segment is defined as $\alpha = [s:t]$ with $|\alpha| = t-s+1$ being the length of the segment
+    \item
+        \textbf{Path} over $\alpha$ of length L is a sequence $P=((n_1, m_1), \dots, (n_L, m_L))$ with
+        \begin{itemize}
+            \item
+                $m_1 = s, m_L=t$ (boundary condition)
+            \item
+                $(n_{l+1}, m_{l+1}) - (n_l, m_l) \in \Sigma$, $\Sigma = \{(2,1), (1,2), (1,1)\}$
+        \end{itemize}
+    \item
+        For a path one can associate two segments defined by the projections\\
+        $\pi_1(P) = [n_1 : n_L]$ and $\pi_2(P) = [m_1 : m_L]$\\
+        where the boundary condition enforces $\pi_2(P)=\alpha$. $\pi_1(P)$ is refered to as the \textbf{induced segment}
+    \item
+        The score $\sigma(P)$ is defined as $\sigma(P) = \sum_{l=1}^{L} S(n_l, m_l)$ (yields measure of similarity between $\alpha$ and the induced segment)
+    \item
+        \textbf{Block} over $\alpha$ is a subset $B = \alpha' \times \alpha \subseteq [1:N] \times [1:N]$ for some segment $\alpha' = [s', t']$ (N is length of feature sequence)
+    \item
+        Similarily we define two projections $\pi_1(B) = \alpha'$ and $\pi_2(B) = \alpha$ , where $\alpha'$ is the induced segment
+    \item
+        Based on paths and blocks we can now consider differnt kinds of similarity relations between segments
+    \item
+        Segment $\alpha_1$ is \textbf{path-similar} to a segment $\alpha_2$, if there is a path $P$ of high score with $\pi_1(P) = \alpha_1$ and $\pi_2(P) = \alpha_2$
+    \item
+        Segement $\alpha_1$ is \textbf{block-similar} to $\alpha_2$, if there is a block B of high score with $\pi_1(B) = \alpha_1$ and $\pi_2(B) = \alpha_2$
+    \item
+        If similarity measure is symmetric, then SSM S and as well as similarity relations are symmetric
+    \item
+        Transitivity of similarity relation: $\alpha_1$ similar to $\alpha_2$ and $\alpha_2$ similar to $\alpha_4$ $\Rightarrow$ $\alpha_1$ similar to $\alpha_3$ (at least to a certain degree)
+    \item
+        Consequence: Block-similarity between $\alpha$ and $\alpha'$, and $\alpha$ and $\alpha'$ $\Rightarrow$ Block-similarity between $\alpha$ and $\alpha$\\
+    \item
+        Algorithmic pipeline:
+        \begin{enumerate}
+            \item
+                The musical signal is transformed into a suitable feature sequence
+            \item
+                A self-similarity matrix is computed from the feature sequence based on a similarity measure
+            \item
+                Blocks and paths of high overall score are derived from the SSM. Each block or path defines a pair of similar segments
+            \item
+                Entire groups of mutually similar segments are formed from the pairwise relations by applying a clustering step
+        \end{enumerate}
+    \item
+        Leaves a lot of freedom and needs to be adjusted to account for particular properties of the underlying type of music and the requirements of the intended application
+    \item
+        Major challenges arise from the fact that musical parts are rarely repeated in precisely the same way (differ in dynamics, orchestration, articulation, tempo, harmony, melody or any combination of these) $\rightarrow$ block and path extraction step as well as the grouping step are often error-prone and fragile
+\end{itemize}
+
+\subsection*{Enhancement Strategies}
+\subsubsection*{Feature Representation}
+\begin{itemize}
+    \item
+        Idea: Downsample (with downsampling rate $d$) and smooth chroma features (with smoothing window of length $l$)
+    \item
+        Result: Emphasis on the rough harmonic content
+\end{itemize}
+
+\subsubsection*{Path Smoothing}
+\begin{itemize}
+    \item
+        Idea: Apply averaging filter (or low-pass filter) in the direction of the main diagonal
+    \item
+        Result: Emphasis on diagonal information and a softening of other, non-diagonal structures\\
+    
+    \item
+        Smoothing length $L$ and SSM $S$
+    \item
+        Smoothed self-similarity matrix $S_L = \ffrac{1}{L} \sum_{l=0}^{L-1} S(n+l, m+l)$
+    \item
+        Only works well if there are no relative tempo differences between the segments to be compared\\
+    \item
+        Idea: Apply a multiple filtering approach, where the SSM is smoothed along various directions that lie in a neighborhood of the direction defined by the main diagonal and then take cell-wise maximum over all these matrices
+    \item
+        Tempo difference given by real number $\theta > 0$ (e.g. second segment played $\theta$ times slower than the first one) gradient is (1, $\Theta$)
+    \item
+        $S_{L, \theta} (n,m) = \ffrac{1}{L}\sum_{l=0}^{L-1} S(n+l, m+[l\cdot \theta])$, where $[l\cdot \theta]$ is integer closest to the real number
+    \item
+        Consider finite set of tempo parameters $\Theta$ and calculate final matrix $S_{L, \Theta}(n,m) = \max_{\theta \in \Theta} S_{L, \theta}(n,m) $
+\end{itemize}
+
+\subsubsection*{Transposition Invariance}
+\begin{itemize}
+    \item
+        Problem: certain musical parts get repeated in a transposed form, where the melody is moved up or down in pitch by a constant interval
+    \item
+        Cyclic shift operator $p: \mathbb{R}^{12} \rightarrow \mathbb{R}^{12}$
+    \item
+        \textbf{i-transposed self-similariy matrix} $p^i(S)(n,m) = s(p^i(x_n), x_m)$
+    \item
+        \textbf{transposition-invariant self-similarity matrix} $S^{TI}(n,m) = max_{i \in [0:11]}p^i(S)(n,m)$
+    \item
+        \textbf{transposition index matrix} $I(n,m) = argmax_{i \in [0:11]} p^i(S)(n,m)$
+\end{itemize}
+
+\subsubsection*{Thresholding}
+\begin{itemize}
+    \item
+        Idea: Suppress values that fall below a given threshold in order to suppress noise
+    \item
+        Simplest strategy is \textbf{global thresholding} and/or binarization
+\end{itemize}
+
+\subsection*{Audio Thumbnailing}
+\begin{itemize}
+    \item
+        Given a music recording, the objective is to automatically determine the most representative section
+    \item
+        Most procedures try to identify a section that has on the one hand a certain minimal duration and on the other many (approximate) repetitions
+\end{itemize}
+
+\subsubsection*{Fitness Measure}
+\begin{itemize}
+    \item
+        Captures to aspects: how well a given segment explains other related segments, and how much of the overall music recording is covered by all the related segments
+    \item
+        Requirement: SSM S which fullfills property $S(n,m) \leq 1$ and $S(n,n) = 1$\\
+    \item
+        \textbf{Segment family} is a set $\mathcal{A}=\{\alpha_1, \dots, \alpha_K\}$ of pairwise disjoint semgents $\alpha_i \cap \alpha_j = \emptyset$
+    \item
+        Let $\gamma(\mathcal{A}) = \sum_{k=1}^{K} |\alpha_k|$ be the coverage of $\mathcal{A}$
+    \item
+        A \textbf{path family} over $\alpha$ is defined to be a set $\mathcal{P} = \{P_1, \dots, P_K\}$ consisting of paths $P_k$ over $\alpha$
+    \item
+        The set of induced segments $\{\pi(P_1), \dots, \pi(P_K)\}$ (\textbf{induced segment family}) is required to be a segment family (pairwise disjoint)
+    \item
+        The score of the path family is defined as $\sigma(\mathcal{P}) = \sum_{k=1}^K \sigma(P_k)$
+    \item
+        Optimal path family is $\mathcal{P}^* = argmax_{\mathcal{P}}\;\sigma(\mathcal{P})$\\
+    \item
+        Score of path family depends on size of $\alpha$ and the length of their paths and also captures trivial self-explanations
+    \item
+        Subtract length of self-explaining $\alpha$ from score (if S fullfils normalization properties)
+    \item
+        Divide by lengths of paths $L_k = |P_k|$
+    \item
+        Normalized score $\hat{\sigma}(\alpha) = \frac{\sigma(\mathcal{P}^*) - |\alpha|}{\sum_{k=1}^K L_k}$ (how well)
+    \item
+        Normalized coverage $\hat{\gamma}(\alpha) = \frac{\gamma(\mathcal{A}^*) - |\alpha|}{N}$ (how much)
+    \item
+        Fitness $\varphi(\alpha) = 2\cdot \ffrac{\hat{\gamma} \cdot \hat{\sigma}(\alpha)}{\hat{\gamma} + \hat{\sigma}(\alpha)}$ (Harmonic mean $\Rightarrow$ slightly favors shorter segments)
+    \item
+        Thumbnail $\alpha^* = argmax_{\alpha}\varphi(\alpha)$
+\end{itemize}
+
+\subsubsection*{Scape Plot Representation}
+\begin{itemize}
+    \item
+        Each segment can be uniquely described by its center $c(\alpha) = (s+t)/2$ and its length $|\alpha|$
+    \item
+        Use center as horizontal and length as vertical coordinate
+    \item
+        Segments $\alpha'$ contained in a given segment $\alpha$ lie in subtriangle below $\alpha$
+\end{itemize}
+
+\subsection{Novelty-Based Segmentation}
+\begin{itemize}
+    \item
+        Goal: locate points in time where musical changes occur, thus making the transition between two subsequent parts
+    \item
+        Idea: Correlate a checkerboard-kernel function along the main diagonal of the SSM, which yields a novelty function
+    \item
+        Simple $(2 \times 2)$-unit-kernel $K = \begin{bmatrix} -1 & 1 \\ 1 & -1 \end{bmatrix}$
+    \item
+        Kernel size is important (sudden vs. slow changes)
+    \item
+        Maxima of novelty curve correspond to changes in audio recording
+    \item
+        Only works if SSM has block-like structures
+\end{itemize}
+
+\subsection{Structure Features}
+TODO
 \end{document}
