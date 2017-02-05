@@ -1,0 +1,38 @@
+:- op(900,yfx,<>). % equivalence
+:- op(900,yfx,>). % implication
+:- op(850,yfx,\/). % disjunction
+:- op(800,yfx,\&). % conjunction
+:- op(750,fx,~). % negation
+
+const(c). % we declare c to be a constant
+fun(f,1). % we declare f to be a unary function
+pred(p,1). % we declare p to be a unary predicate
+vari(x). % we declare x to be a variable
+
+tmls([]). % we declare the empty list to be a list of well-formed terms
+tmls([H|T]) :- (tm(H),tmls(T)). % we declare the list H::T to be a list of well-formed terms
+
+% define the predicate tm for well-formed terms
+tm(X) :- vari(X).
+tm(X) :- X =.. [H|T], length(T, N), fun(H, N), tmls(T).
+
+% define the predicate prop for well-formed propositions
+prop(X) :- X =.. [H|T], length(T,N), pred(H,N), tmls(T).
+prop(\+ (X, \+ Y)) :- vari(X), prop(Y).
+prop(X <> Y) :- prop(X), prop(Y).
+prop(X > Y) :- prop(X), prop(Y).
+prop(X \/ Y) :- prop(X), prop(Y).
+prop(X \& Y) :- prop(X), prop(Y).
+prop(~X) :- prop(X).
+prop(true).
+
+free(X, X).
+free(X, ~X).
+free(X, P):- P =.. [H|T], length(T, N), fun(H, N), free(X, T).
+free(X, P):- P =.. [H|T], prop(H), free(X, T).
+free(X, [H,T]) :- free(X, H); free(X, T).
+free(X, Y <> Z) :- free(X, Y); free(X, Z).
+free(X, Y > Z) :- free(X, Y); free(X, Z).
+free(X, Y \/ Z) :- free(X, Y); free(X, Z).
+free(X, Y \& Z) :- free(X, Y); free(X, Z).
+free(_, []) :- false.
