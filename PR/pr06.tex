@@ -1,0 +1,99 @@
+\section*{6. Discriminant Analysis 1}
+\begin{itemize}
+    \item
+        Discriminant analysis methods are discriminative modeling methods that model the posterior through its factorization
+    $$ p(y|x) = \ffrac{p(y) \cdot p(x|y)}{\sum_y p(y) \cdot p(x|y)} $$
+\end{itemize}
+
+\subsection*{Gaussian Classifier}
+\begin{itemize}
+    \item
+        We call the Bayesian classifier Gaussian, if the class conditional density $p(x|y)$ is Gaussian, i.e.
+        $$p(x|y) = N(x, \mu_y, \Sigma_y) = \ffrac{1}{\sqrt{det 2 \pi \Sigma_y}} e^{-\ffrac{1}{2} (x-\mu_y)^T \Sigma_y^{-1} (x-\mu_y)} $$
+        where
+        $x \in \mathbb{R}^d$ is feature vector, $\mu_y \in \mathbb{R}^d$ is mean vector of class $y$ and $\Sigma_y \in \mathbb{R}^{d \times d}$ is positive definite covariance matrix
+    \item
+        In general decision boundary is quadratic in the components of $x_i$ of the feature vector $x$, linear if all classes share the same covarinace matrix
+    \item
+        If all covariance matrices are diagonal matrices, then we get a Naive Bayes classifier
+    \item
+        ... 2 more facts, see slides
+    \item
+        Regularized Discriminant Analysis:
+        \begin{itemize}
+            \item
+                A compromise between linear and quadratic decision boundaries can be achieved by using regularized covariance matrices:
+                $$\Sigma_y (\alpha) = \alpha \Sigma_y = (1 - \alpha) \Sigma$$
+                where $\alpha \in [0,1]$ and $\Sigma$ denotes the joint covariance matrix ($\alpha = 0$: linear decision boundary, $\alpha = 1$: quadratic decision boundary)
+        \end{itemize}
+
+\end{itemize}
+\subsection*{Feature Transform}
+\begin{itemize}
+    \item
+        Singular Value Decomposition:
+        \begin{itemize}
+            \item
+                A symmetric positive semidefinite covariance matrix $\Sigma \in \mathbb{R}^{d \times d}$ can be decomposed into:
+                $$\Sigma = U D U^T = (UD^{\frac{1}{2}})(UD^{\frac{1}{2}})^T = (UD^{\frac{1}{2}}) \cdot I \cdot (UD^{\frac{1}{2}})^T$$
+                $$\Sigma^{-1} = U D^{-1} U^T = (UD^{-\frac{1}{2}}) \cdot I \cdot (UD^{-\frac{1}{2}})^T$$
+        \end{itemize}
+    \item
+        We can make decision boundaries linear by applying:
+        \begin{itemize}
+            \item
+                $x'  = \phi_y(x) = D_y^{-\frac{1}{2}} U_y^T x$ 
+            \item
+                One can show that $p(x'|y) = N(x'; \mu'_y, \Sigma'_y) = N(x', D_y^{-\frac{1}{2}} U_y^T \mu_y, I)$
+            \item
+                All classes share the same covariance matrix (identity), so decision boundaries are linear
+            \item
+                Huge disadvantage: feature transform depends on class number $y$ $\rightarrow$ have to compute multiple transforms
+        \end{itemize}
+\end{itemize}
+\subsection*{Linear Discriminant Analysis}
+\begin{itemize}
+    \item
+        Further assumption: all classes share the same covariance matrix
+    \item
+        Computation:
+        \begin{enumerate}
+            \item
+                ML estimation of the joint covariance matrix:
+                $$\hat{\Sigma} = \ffrac{1}{m} \Sigma_{i=1}^m (x_i - \mu_{y_i}) (x_i - \mu_{y_i})^T$$
+            \item
+                Compute SVD of covariance matrix: $\hat{\Sigma} = UDU^T$
+            \item
+                Assign transform: $\phi = D^{-\frac{1}{2}}U^T$
+            \item
+                Compute mean vectors for all y
+                $$ \mu'_y = \phi(\mu_y) = D^{-\frac{1}{2}}U^T \mu_y $$
+        \end{enumerate}
+        Output: feature transform $\phi$, transformed mean vectors $\mu'_y$
+    \item
+        Decision rule using sphered data $\phi(x)$:
+        \begin{align*}
+            y^* &= \underset{y}{argmax} p(y|\phi(x)) \\
+            &= \underset{y}{argmax} \{log p(y) - \ffrac{1}{2} (\phi(x) - \phi(\mu_y))^T  (\phi(x) - \phi(\mu_y)) \} \\
+            &= \underset{y}{argmin} \{ \ffrac{1}{2} \norm{\phi(x) - \phi(\mu_y)}_2^2 - log p(y) \}
+        \end{align*}
+        So if classes share the same prior, the decision rule is the Nearest Neighbor decision rule (classify as class with nearest mean)
+    \item
+        Insights from geometrical analysis of sphered data:
+        \begin{itemize}
+            \item
+                Class centroids span (at most) (K-1)-dimensional subspace:
+                \begin{itemize}
+                    \item
+                        There can be at most $min(d, K-1)$ discriminants
+                    \item
+                        The centroids of the classes are located within the discriminant subspace according to their perpendicular coordinates onto the discriminants
+                \end{itemize}
+
+            \item
+                Relative differences are not affected by coordinates in the $(d - K + 1)$-dimensional subspace that is orthogonal to the $(K-1)$-dimensional subspace spanned by class centroids
+
+        \end{itemize}
+
+\end{itemize}
+

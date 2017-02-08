@@ -1,0 +1,34 @@
+\section*{4. Logistic Regression 2}
+\begin{itemize}
+    \item
+        We can express a nonlinear $F(x)$ as a scalar product by lifting $x$ into a higher dimensional space:
+        \begin{itemize}
+            \item
+                Given $x = (x_1, x_2)^T$, $A = \begin{pmatrix} a_{11} & a_{12}\\ a_{21} & a_{22} \end{pmatrix}$, $\alpha = (\alpha_1, \alpha_2)^T$, $\alpha_0$
+            \item
+                then $F(x) = \Theta x'$ with $\Theta, x' \in \mathbb{R}^6$:\\
+                $\Theta = (a_{11}, a_{12} + a_{21}, a_{22}, \alpha_1, \alpha_2, \alpha_0)^T$\\
+                $x' = (x_1^2, x_1x_2, x_2^2, x_1, x_2, 1)^T$
+        \end{itemize}
+    \item
+        We write the parameterized logistic function in the following: $g(\Theta^T x) = \ffrac{1}{1+e^{-\Theta^T x}}$ where $\Theta, x$ are the lifted parameters of the original decision function $F$\\
+    \item
+        Let us assume the postiriors are given by \\
+        $p(y=0|x) = 1 - g(\Theta^T x)$ \\
+        $p(y=1|x) = g(\Theta^T x)$
+    \item
+        The parameter vector $\Theta$ has to be estimated from a set $S$ of $m$ training samples $S=\{(x_1, y_1), \dots, (x_m, y_m)\}$
+    \item
+        Posteriors can be rewriten using Bernoulli probability: $p(y|x) = g(\Theta^T x)^y (1- g(\Theta^T x))^{1-y}$
+    \item
+        Log-Likelihood (assuming samples are mutually independent):\\
+        $$\mathcal{L}(\Theta) = log(\prod_{i=1}^{m} p(y_i|x_i)) = \dots = \sum_{i=1}^{m}(y_i \Theta^T x_i + log(1-g(\Theta^T x_i)))$$
+    \item
+        log-likelihood function is concave $\rightarrow$ Newton-Raphson algorithm to solve the unconstrained optimization problem:\\
+        $$\Theta^{(k+1)} = \Theta^{(k)} - (\ffrac{\delta^2}{\delta \Theta \delta \Theta^T} \mathcal{L}(\Theta^{(k)}))^{-1}\ffrac{\delta}{\delta \Theta} \mathcal{L}(\Theta^{(k)})$$
+    \item
+        $\ffrac{\delta^2}{\delta \Theta \delta \Theta^T}$ is the Hessian matrix (contains all the second derivatives)
+    \item
+        $x_1 = x_0 - \ffrac{f'(x_0)}{f''(x_0)}$ 
+\end{itemize}
+

@@ -1,0 +1,56 @@
+\section*{5. Naive (Idiot's) Bayes}
+\begin{itemize}
+    \item
+        Still widely (ans successfully) used, often outperforming much more advanced classifiers
+    \item
+        Appropriate in the presence of high dimensional features 
+    \item
+        Do not require a huge set of training data
+    \item
+        The Naive Bayes classifier makes a very strong (naive) independency assumption: All $d$ components of the feature vector $x$ are assumed to be mutually independent, so \textbf{not}:
+        $$ p(x|y) = p(x_1, x_2, \dots, x_d | y) = p(x_1|y) p( x_2, \dots, x_d | y, x_1) = \dots = p(x_1|y) \prod_{i=2}^d p(x_i|y, x_1, \dots, x_{i-1})$$
+        \begin{center}\textbf{but}\end{center}
+        $$p(x|y) = \prod_{i=1}^d p(x_i|y)$$
+    \item
+        The decision rule of the naive Bayes reads as: $ y^* = \underset{y}{argmax} \;p(y|x) = \underset{y}{argmax} \;p(y) \prod_{i=1}^{d} p(x_i|y) $
+    \item
+        Advantage of Bayes (illustrated via example):
+        \begin{itemize}
+            \item
+                100-dimensional feature vectors $x \in \mathbb{R}^{100}$, model distrubtions via Gaussians
+            \item
+                mutually \textbf{dependent} components:\\ $\mu_y \in \mathbb{R}^{100}$ \\ $\Sigma \in \mathbb{R}^{100 \times 100}$\\
+                $\rightarrow$ Need to estimate $100 + 100 \dot (100+1)/2 = 5150$ parameters per class
+            \item
+                mutually \textbf{independent} components: \\ for each component we have to estimate one mean and one variance\\
+                $\rightarrow$ Need to estimate $100+100=200$ parameters per class
+        \end{itemize}
+    \item
+        Logit-transform: Keine Ahnung was das soll\\
+    \item
+        Other techniques to beat the curse of dimensionlity:
+        \begin{itemize}
+            \item
+                Reduction of parameter space: Independency assumption (from complete dependency to mutual independency)
+            \item
+                Reduction of the dimension of the feature vectors
+        \end{itemize}
+    \item
+        First order dependency:
+        $$ p(x|y) = p(x_1, x_2, \dots, x_d | y) = p(x_1|y) p( x_2, \dots, x_d | y, x_1) = \dots = p(x_1|y) \prod_{i=2}^d p(x_i|y, x_{i-1})$$
+    \item
+        First order dependency in Gaussian random vectors can be identified through the covariance matrix:
+        $$
+        \Sigma = 
+        \begin{pmatrix}
+            \sigma_{1,1} & \sigma_{1,1} & 0 & 0 & \dots & 0 & 0 \\ 
+            \sigma_{2,1} & \sigma_{2,2} & \sigma_{3,2} & 0 & \dots & 0 & 0 \\
+            0 & \sigma_{3,2} & \sigma_{3,3} & \sigma_{4,3} & \dots & 0 & 0 \\
+            \dots &  \dots &\dots &\dots &\dots &\dots & \sigma_{d, d-1}\\
+            0 & 0 & 0 & 0 & \dots & \sigma_{d, d-1} & \sigma_{d,d}\\
+        \end{pmatrix}
+        $$
+    \item
+        Tied diagonal elements: $\sigma_{i,i} = \sigma$ 
+\end{itemize}
+

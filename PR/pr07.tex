@@ -1,0 +1,81 @@
+\section*{7. Dicriminant Analysis 2}
+\subsection*{Rank Reduced Linear Discriminant Analysis}
+\begin{itemize}
+    \item
+        \textbf{Problem:} How to choose an L-dimensional subspace with $L < K - 1$ that is good for LDA?
+    \item
+        \textbf{Idea:} Maximizing the spread of the L-dimensional projection of centroids 
+    \item
+        \textbf{Solution:} PCA: We compute the principal components of the covariance matrix of the mean vectors
+        $$\mu'_y = \phi(\mu_y) \in \mathbb{R}^{K-1}$$\\
+    \item
+        \textbf{Objective function:}
+        $$\Phi^* = \underset{\Phi}{argmax}(\ffrac{1}{K} \sum_{y=1}^{K}(\Phi \mu'_y - \Phi \mu')^T(\Phi \mu'_y - \Phi \mu') + \sum_{i=1}^{L} \lambda_i (\norm{\Phi_i}_2^2 -1))$$ 
+        where $\norm{\Phi_i}_2^2$ denotes the $L_2$ norm of the i-th row vector of $\Phi$ and $\Phi \in \mathbb{R}^{L \times K-1}$
+    \item
+        \textbf{Derivative:}
+        $$\ffrac{\delta}{\delta \Phi} \{\ffrac{1}{K} \sum_{y=1}^{K}(\Phi \mu'_y - \Phi \mu')^T(\Phi \mu'_y - \Phi \mu') + \sum_{i=1}^{L} \lambda_i (\norm{\Phi_i}_2^2 -1)\} = \dots = 2 \Phi \Sigma_{inter} + 2 \lambda \Phi = 0$$ 
+    \item
+        \textbf{Eigenvector eigenvalue problem:}
+        $$\Sigma_{inter} \Phi^T = \lambda' \Phi^T$$ 
+    \item
+        \textbf{Procedure:}\\
+        Input: training data $S = \{(x_1, y_1), \dots, (x_m, y_m)\}$
+        \begin{enumerate}
+            \item
+                Compute the covariance matrix of transformed mean vectors
+                $$\hat{\Sigma}_{inter} = \ffrac{1}{K} \sum_{y=1}^K (\mu'_y - \mu')(\mu'_y - \mu')^T$$ 
+                where $\mu' = \ffrac{1}{K} \sum_{y=1}^{K} \mu'_y$
+            \item
+                Compute the L eigenvectors of the covariance matrix belonging to the largest eigenvalues
+            \item
+                The eigenvectors are the rows of the mapping $\Phi$ from the $(K-1)$-to the $L$-dimensional feature space
+        \end{enumerate}
+        Output: matrix $\Phi$
+        \item
+            \textbf{Note:} For PCA we would have
+            $$\Phi^* = \underset{\Phi}{argmax}(\sum_{i=1}^{m} \sum_{j=1}^{m} (\Phi x_i - \Phi x_j)^T(\Phi x_i - \Phi x_j) - \lambda(\norm{\Phi}_2^2-1))$$ 
+            $$\Sigma \Phi^T = \lambda' \Phi^T$$
+
+\end{itemize}
+\subsection*{Fisher Transform}
+\begin{itemize}
+    \item
+        Project samples $x_i$ onto a straight line with direction $r$, $\norm{r}_2 = 1$:
+        $$\tilde{x_i} = x_i^T r$$
+    \item
+        Maximine the ratio of the between-class scatter and the within-class scatter: 
+        $$r^* = \underset{r}{argmax} J(r) = \underset{r}{argmax}\ffrac{| \tilde{\mu}_1 - \tilde{\mu}_2|^2}{\tilde{s_1}^2 + \tilde{s_2}^2}$$
+    \item
+        Classify by applying a threshold to $\tilde{x_i}$
+    \item
+        Procedure:
+        \begin{enumerate}
+            \item
+                Mean and scatter matrix for each class:
+                $$ \mu_k = \ffrac{1}{m_k} \sum_{i=1, y_i = k}^{m_k} x_i$$
+                $$ S_k = \sum_{i=1, y_i = k}^{m_k} (x_i - \mu_k) (x_i - \mu_k)^T$$
+            \item
+                Within-class scatter matrix:
+                $$S_w = S_1 + S_2$$
+            \item
+                Between-class scatter matrix:
+                $$S_B = (\mu_1 - \mu_2)(\mu_1 - \mu_2)^T$$
+            \item
+                Expressing $\tilde{\mu_k}$ and $\tilde{s_k}^2$ of projected samples:
+                $$\tilde{\mu_k} = \dots = r^T \mu_k$$
+                $$\tilde{s_k}^2 = \dots = r^T S_k r$$
+            \item
+                Plug it into $J(r)$:
+                $$ J(r) = \ffrac{| \tilde{\mu}_1 - \tilde{\mu}_2|^2}{\tilde{s_1}^2 + \tilde{s_2}^2} = \ffrac{r^T S_B r}{r^T S_W r}$$
+                This is known as the Generalized Rayleigh Quotient
+            \item
+                Maximizing the Generalized Rayleigh Quotient is equivalent to solving the following generalized eigenvalue problem:
+                $$S_B r^* = \lambda S_W r^*$$
+                $$ S_W^{-1} S_B r^* = \lambda r^*$$
+            \item
+                The direction of $r^*$ is:
+                $$ r^* = S_W^{-1}(\mu_1 - \mu_2) $$
+        \end{enumerate}
+\end{itemize}
+
