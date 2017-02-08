@@ -1,5 +1,4 @@
 \documentclass{scrartcl}
-
 \usepackage{hyperref}
 \usepackage{amssymb}
 \usepackage{mathtools}
@@ -12,7 +11,10 @@
 \DeclarePairedDelimiter\inner{\langle}{\rangle}%
 \newcommand{\ffrac}[2]{\ensuremath{\frac{\displaystyle #1}{\displaystyle #2}}}
 
-\begin{document}
+\begin{document} 
+\tableofcontents
+\newpage
+
 \section{Fourier Transform in a Nutshell}
 Key Idea: Compare signal with sinusoids of various frequencies and phases. 
 
@@ -558,7 +560,7 @@ TODO
 
 \newpage
 
-\section*{Tempo and Beat Tracking}
+\section{Tempo and Beat Tracking}
 \begin{itemize}
     \item
 	Beat: sequence of perceived pulse positions, which are typically equally space in time and specified by the parameters phase and period
@@ -719,11 +721,298 @@ TODO
     \item
 	Todo: Discussion of Properties
 \end{itemize}
-\end{document}
 
 \newpage
 
-\section*{Content-Based Audio Retrival}
+\section{Content-Based Audio Retrival}
 \begin{itemize}
     \item
+        Audio Identification: Given a small audio fragment as query, find the audio recording that is the source of the query
+    \item
+        Audio Matching: Given query, find audio excerpts that musically correspond to query
+    \item
+        Version Identification: Find remixes, cover songs, ...
+
 \end{itemize}
+\subsection*{Audio Identifikation}
+\begin{itemize}
+    \item
+        The audio material is compared by means of so-called \textbf{audio fingerprints}, which are compact and descriptive audio features
+    \item
+        Requirements:
+        \begin{itemize}
+            \item
+                High specifity
+            \item
+                Robustness (noise, distortion, ...)
+            \item
+                Compactness
+            \item
+                Scalability
+        \end{itemize}
+        Trade-off between requirements, improving one often implies losing perfomance in some other
+\end{itemize}
+\subsubsection*{Audio Fingerprints Based on Spectral Peaks}
+\textbf{Design of Audio Fingerprints}
+\begin{itemize}
+    \item
+        First: Calculate STFT from audio signal
+    \item
+        Second: Apply peak-piking strategy that identifies time-frequency points that have a higher magnitude than all their neighbors within a region around the point (reduces complicated spectrogram representation into sparse set of coordinates (\textbf{constellation map}))
+\end{itemize}
+\textbf{Fingerprint Matching}
+\begin{itemize}
+    \item
+        Let $C(Q)$ and $C(D)$ be the constellation maps of the query $Q$ and the document $D$
+    \item
+        Shifting the query by $m \in \mathbb{Z}$ positions yields the constellation map
+        $$ m + C(Q) = \{(m + n, k | (n,k) \in C(Q))\}$$
+    \item
+        Matching function: $\Delta_C(m) = |(m + C(Q)) \land C(m)|$
+\end{itemize}
+\textbf{Indexing, Retrieval, Inverted Lists}
+\begin{itemize}
+    \item
+        Query point $(n,h) \in F(Q)$, where $n$ is time stamp and $h$ is hash
+    \item
+        Inverted list $L(h)$ consists (for fixed $h$) of time stamps $n$ with $(n, h) \in F(D)$
+    \item
+        $L(h) - n = \{ l - n | l \in L(h)\}$ contains all the shifts that, when applied to the query point $(n,h)$ result in a match with a database point
+    \item
+        Matching function: $\Delta_F (m) = \sum_{(n,h) \in F(Q)} 1_{L(h) - n}(m)$ where $ 1_B(a) = 1$ when $a \in B$\\
+    \item
+        Let $N = |F(D)|$, $M = |F(Q)|$ and $L = |H|$
+    \item
+        Assuming hash values of database are evenly distributed, each of the $L$ inverted lists contains $N/L$ elements
+    \item
+        Index can be computed offline
+    \item
+        In the query stage, only the information contained in the inverted lists corresponding to the $M$ items of $F(Q)$ is needed
+    \item
+        The $M$ lists need to be accessed, shifted and futher processed
+    \item
+        Overall complexity: Access and process $M$ lists of length $N/L$ $\rightarrow$ linear in $\ffrac{M\cdot N}{L}$
+    \item
+        Naive approach: linear in $M \dot N$, gain of factor $L$ 
+    \item
+        Idea: Further increase number $L$ of hashes
+\end{itemize}
+\textbf{Indexing (Shazam)}
+\begin{itemize}
+    \item
+        Fix a anchor point and define a target zone
+    \item
+        Use every point as anchor point
+    \item
+        Hash: $(f_1, f_2, \Delta t)$\\
+        $\rightarrow$ Increased specifity of hashes $\rightarrow$ much smaller hash lists $\rightarrow$ profit!
+\end{itemize}
+...
+
+\newpage
+
+\section{Chord Recognition}
+\begin{itemize}
+    \item
+        Goal: Given a audio recording of a piece of music, find which chords are played at which time
+\end{itemize}
+\subsection*{Template-Based Chord Recognition}
+\begin{itemize}
+    \item
+        First step: transform recording into a sequence $X = (x_1, x_2, \dots, x_N)$ of feature vectors
+    \item
+        Second step: 
+
+        \begin{itemize}
+            \item 
+                map feature vectors to a chord label via pattern matching
+            \item
+                Precompute a set of templates (prototypical chroma vectors the represents a specific mucial chord)
+            \item
+                Similarity measure
+        \end{itemize}
+\end{itemize}
+\subsubsection*{Ambiguities}
+\begin{itemize}
+    \item
+        Chord Ambiguities: Chords may share same notes
+    \item
+        Acoustic Ambiguities: Harmonics, Major-Minor confusion 
+    \item
+        Tuning: Instrument not tuned as specified by the center frequency of the equal-tempered scale ($\rightarrow$ notes energy gets spread across neighboring chroma band)
+    \item
+        Segmentation: Broken chords
+\end{itemize}
+\subsubsection*{Enhancement Strategies}
+\begin{itemize}
+    \item
+        Templates with harmonics (e.g. energy of $k^{th}$ harmonic is $\alpha^{k-1}$ for some $\alpha \in [0,1]$)
+    \item
+        Templates from examples (e.g. take average chroma vectors), naturally inherit the musical and acoustic properties. It sufficies to learn $C$ and $Cm$ chord and apply cyclic shifting
+    \item
+        Spectral enhancement, "smoothing" (e.g. Logarithmic compression)
+    \item
+        Temporal smoothing, Prefiltering (e.g. shift averaging filter over chroma feature sequence)
+\end{itemize}
+\subsection*{HMM-Based Chord Recognition}
+\begin{itemize}
+    \item
+        Template-based chord recognizer only considers current frame, not frame sequence
+    \item
+        Some harmonic progressions are much more likeli then other, e.g. $I-IV-V-I$
+\end{itemize}
+\subsubsection*{Markov Chains and Transition Probabilities}
+\begin{itemize}
+    \item
+        Considered chords are refered to as \textbf{states}, $\mathcal{A} = \{\alpha_1, \alpha_2, \dots, \alpha_I\}$
+    \item
+        The change from one state to another is specified according to set of probabilities (assumption: probability only depends on current state, not the ones before, "memoryless"), \textbf{state transition probabilities}
+    \item 
+        \textbf{Initial state probabilities}
+\end{itemize}
+\subsection*{Hidden Markov Models}
+\begin{itemize}
+    \item
+        With Markov chain we can compute probability for a given observation consisting of a sequence of chords
+    \item
+        Chord recognition task however we observe a sequence of chroma vectors
+    \item
+        Each state is equipped with a probability function that expresses the likelihood for a given chord type to output or emit a certain feature vector (\textbf{emission, output probabilities})
+    \item
+        Discrete HMM: Output space is assumed to be discrete and finite $\rightarrow$ Finite set of output elements $\mathcal{B} = \{\beta_1, \dots, \beta_2\}$
+    \item
+        Summary: HMM is fully specified by five tuple\\ (set of states, state trans. probs., init state probs. observation syms., emission probs)
+\end{itemize}
+\subsection*{Evaluation and Model Specification}
+\textbf{Evaluation problem}
+\begin{itemize}
+    \item
+        Given a observation sequence $O$, compute probability $P(O|\Theta)$
+    \item
+        "Score" of how well a given model matches a given observation sequence, interesting when one has to choose among several competing models
+    \item
+        $P(O|\Theta) = \sum_{S=(s_1, s_2, s_N)} P(0, S|\Theta)$
+\end{itemize}
+\textbf{Uncovering Problem}
+\begin{itemize}
+    \item
+        Find state sequence that best explains observation sequence 
+    \item
+        Possible optimization criterion:
+        $S^* = \underset{S = (s_1, s_2, \dots, s_N)}{argmax} P(O,S|\Theta)$
+    \item
+        Viterbi Algorithm:
+        \begin{itemize}
+            \item
+                Observation sequence $O=(o_1, \dots, o_N)$
+            \item
+                $O(1:n) = (o_1, \dots, o_n)$
+            \item
+                $D(i:n) = \underset{S}{max} \; P(O(1:n), (s_1, \dots, s_n=\alpha_i)|\Theta)$, highest probability of $O(1:n)$ with state sequence ending on $\alpha_i$
+            \item
+                $(I \times N)$ matrix $D$ can be computed recursively\\
+            \item
+                $ S^* = (\alpha_i, \dots, \alpha_{i_N})$
+            \item
+                Apply backtracking procedure
+            \item
+                $i_N = \underset{j \in [1:I]}{argmax} D(j, N)$, ending state of state sequence, which is most probable to generate observations
+            \item
+                $i_n = \underset{j \in [1:I]}{argmax} \; \; a_{j, i_{n+1}}D(j, n)$, ending state of state sequence of length $n$, which is most probable to create observations $O(1:n)$ weighted with transition probability to previously calculated state $i_{n+1}$\\
+            \item
+                $O(I^2 N)$ operations much better than brute force $O(I^N)$
+        \end{itemize}
+\end{itemize}
+\textbf{Estimation Problem}
+\begin{itemize}
+    \item
+        Given an observation sequence $O$, improve probability measures of models
+    \item
+        Baum-Wekch algorithm:
+        \begin{itemize}
+            \item
+                TODO:....
+        \end{itemize}
+\end{itemize}
+\subsection*{Application to Chord Recognition}
+\textbf{Specification of Emission Probabilities}
+\begin{itemize}
+    \item
+        To make HMM discrete (make observations coming from a finite output space) one can introduce a so-called codebook (set of prototypical vectors).\textbf{Quantization}, clustering
+    \item
+        Alternative: continuous HMMs, emission probability becomes continuous pdf
+\end{itemize}
+\textbf{Specification of Transition Probabilities}
+\begin{itemize}
+    \item
+        Can be defined manually by expert
+    \item
+        Automatic approach:
+        \begin{itemize}
+            \item
+                We assume the training set is represented by a sequence of frames and that each frame is labeled with ont of the states
+            \item
+                Next, count how often each of the possible chord transitions occurs in the training data
+            \item
+                $\mu(i,j) = $ number of transitions $\alpha_i \rightarrow \alpha_j$
+            \item
+                Transition probability matrix $A = (a_{ij})$ with $a_{ij} = \ffrac{\mu(i,j)}{\sum_k \mu(i,k)}$
+            \item
+                Dominated by diagonal matrix (self-transition probabilities): Chord durations occuring are much longer than the frame length
+            \item
+                Other elements, e.g. $\alpha_{i, i+7}$ are also much higher (in this example because change from tonic to dominant more probable) $\rightarrow$ secondary diagonals
+            \item
+                Indicates that transition probabilities depend on functional relations, independent of underlying key
+            \item
+                Because of this we can apply cyclic shifting and create transposition invariant matrix
+            \item
+                TODO: check ich ned
+        \end{itemize}
+\end{itemize}
+\textbf{Evaluation}
+\begin{itemize}
+    \item
+        Context-sensitive smoothing: recognizer tends to stay in the current chord rather than change to another one. Chord changes are only performed when the relatively low transitions probabilities are compensated by a substantial increase of emission probability
+    \item
+        High self transitions are the main factor
+\end{itemize}
+
+\newpage
+
+\section{Lab Course}
+\subsection{STFT and Chroma Features}
+\begin{itemize}
+    \item
+        STFT: $X(m,k) = \sum_{n=0}^{N-1} x(n+mH)w(n)exp(-2 \pi i k n/N)$
+    \item
+        Spectrogram: $ Y(m,k) = |X(m,k)|^2$
+    \item
+        $T_{coef}(m) = \frac{m \cdot H}{F_s}$
+    \item
+        $F_{coef}(k) = \frac{k \cdot F_s}{N}$\\
+    \item
+        $(\Gamma_{\gamma} \dot Y)(m, k) = log(1 + \gamma \cdot Y(m,k))$, with $\Gamma_{\gamma}(v) = log(1 + \gamma \cdot v)$ \\
+    \item
+        Center frequency $F_{pitch}(p) = 2^{(p-69)/12} \cdot 440$
+    \item
+        Pitch set $P(p) = \{k: [0:K]: F_{pitch}(p-0.5) \leq F_{coef}(k) < F_{pitch}(p+0.5)\}$
+    \item
+        Log-frequency spectrogram: $Y_{LF}(m,p) = \sum_{k \in P(p)} |X(m,k)|^2$
+    \item
+        Chromagram: $C(m,c) = \sum_{\{ p \in [0:127] | p \; mod \; 12 = c\}} Y_{LF}(m,p)$
+\end{itemize}
+\subsection{Median Filtering}
+\begin{itemize}
+    \item
+        Harmonically and percussively enhanced spectromgrams: $\tilde{Y}_p$ and $\tilde{Y}_h$: Median filter along time or frequency axis
+    \item
+        Binary mask $M_p(m,k)$: 1 if $\tilde{Y}_p \geq \tilde{Y}_h$, else zero (for percussive harmonic mask)
+    \item
+        Percussive STFT: $X_p = X \cdot M_p$
+    \item
+        HPSS for chroma enhancement: filter out percussive stuff
+    \item
+        HPSS for onset detection: filter out harmonic stuff
+\end{itemize}
+
+\end{document}
