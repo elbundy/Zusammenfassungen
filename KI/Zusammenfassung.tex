@@ -633,5 +633,149 @@ TODO
 \end{itemize}
 
 \section{Constraint Propagation}
+\begin{itemize}
+    \item
+        Equivalence: Let $\gamma = (V, D, C)$ and $\gamma' = (V, D', C')$ be constraint networks sharing the same set of variables. We say that $\gamma$ and $\gamma$' are equivalent ($\gamma \equiv \gamma$') if the have the same solutions
+    \item
+        Tightness: "$\gamma$' has the same constraints as $\gamma$, plus some"
+    \item
+        Equivalence + Tightness = Inference: Let $\gamma$ and $\gamma$' be constraint networks (where $\gamma$' is equivalent to $\gamma$ but tighter). Then $\gamma$' has the same solutions as, but less consistens partial assignments than $\gamma$\\
+        $\rightarrow$ $\gamma$' is a better encoding of the underlying problem
+    \item
+        Inference during search: At every recursive call of backtracking apply inference onto network. Encode partial assignment as unary constraints.
+    \item
+        Forward checking: Keep track of remaining legal values for unassigned variables, terminate search when any variable has no legal values
+\end{itemize}
+\subsection{Arc Consistency}
+\begin{itemize}
+    \item
+        $X_i$ is arc-consistent with respect to another variable $X_j$ if for every value in the domain $D_i$ there is some value in the domain $D_j$ that satisfies the binary constraint on the arc $(X_i, X_j)$ 
+    \item
+        A network is arc-consistent if every variable is arc consistens with every other variable
+    \item
+        Example: $Y = X^2$ $\rightarrow$ $D_X = \{0,1,2,3\}$ and $D_Y = \{0,1,4,9\}$ makes $X$ and $Y$ arc consistent
+    \item
+        AC-3:
+        \begin{enumerate}
+            \item
+                Initially, hold queue of all arcs in CSP 
+            \item
+                Pop off arbitrary $(X_i, X_j)$ from queue and make $X_i$ arc-consistent w.r.t $X_j$
+            \item
+                $D_i$ unchanged $\rightarrow$ move on to next arc. $D_i$ changed $\rightarrow$ add all arcs $(X_k, X_i)$ to queue, where $X_k$ is a neighbor.
+            \item
+                Repeat until 2. and 3. until queue is empty (equivalent CSP generated) or some $D_i$ gets revised down to nothing (CSP has no equivalent solution)
+        \end{enumerate}
+    \item
+        $m$ constraints and maximal domain size $k$ $\rightarrow$ runs on time $O(m k ^3)$
+\end{itemize}
+Decomposition, Cutset Conditioning, CP with Local Search TODO
+
+\section{Logic and Propositional Reasoning}
+\begin{itemize}
+    \item
+        $H \vdash_c A$: A is proveable from $H$ with $c$
+    \item
+        $H \vDash A$: H logically implies A, whenever H \textit{true} then A \textit{true}
+    \item
+        \textbf{Soundness:} you cannot prove anything that's wrong $(H \vdash_c A \Rightarrow H \vDash A)$
+    \item
+        \textbf{Completness:} you can prove anything that's right $(H \vDash A \Rightarrow H \vdash_c A)$
+\end{itemize}
+\subsection{Introduction}
+\begin{itemize}
+    \item
+        Syntax: What are legal statements (formulas) $A$ in the logic
+    \item
+        Semantics: Which formulas are true under which assignemnts/interpretations $\varphi$, written $\varphi \vDash A$
+    \item
+        Entailment: Which $B$ are entailed by A $(A \vDash B)$?
+    \item
+        Deduction: Which statements $B$ can be derived from A using a set of inference rules (calculus), written $A \vdash_c B$
+\end{itemize}
+\subsection{Propositional Logic (Syntax/Semantics)}
+\begin{itemize}
+    \item
+        Syntax:
+        \begin{itemize}
+            \item
+                Propositional variables: $V_0 = \{P, Q, \dots\}$ 
+            \item
+                Connectives: $\Sigma_0 = \{T, F, \lnot, \land, \lor, \dots\}$
+        \end{itemize}
+    \item
+        Well-formed propositional formulas $wff_0(V_0)$: $\lnot A, A\land B, A \lor B, A \Rightarrow B, A \Leftrightarrow B$ where $A,B \in wff_0(V_0)$ themselfs
+    \item
+        A model $M = (D_0, I)$ for $PL_0$ consists of:
+        \begin{itemize}
+            \item
+                The universe $D_0 = \{T, F\}$
+            \item
+                The interpretation $I: \Sigma \rightarrow D_0^n$ that assigns values to the essential connectives, e.g.\\
+                $I(\land) = D_0 \times D_0 \rightarrow D_0; (\alpha, \beta) \rightarrow T$ iff $\alpha = \beta = T$
+        \end{itemize}
+    \item
+        A variable assignment $\varphi: V_0 \rightarrow D_0$ assigns values to prop. variables
+    \item
+        A value function $I_{\varphi}: wff_0(V_0) \rightarrow D_0$ assigns values to formulae
+    \item
+        We say $e$ entails $f$ ($e \vDash f$), iff $I_{\varphi}(f) = T$ for all $\varphi$ with $I_{\varphi}(e) = T$
+    \item
+        Unsatisfiability theorem: $H \vDash A$ iff $H \cup \{\lnot A\}$ is unsatisfiable
+\end{itemize}
+\subsection{Calculi}
+\subsubsection{Natural Deduction}
+\begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.8]{figures/295}
+\end{figure}
+\begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.8]{figures/298}
+\end{figure} 
+\subsubsection{Analytical Tableaux}
+\begin{itemize}
+    \item
+        $A^{\alpha}$, with $\alpha \in \{T, F\}$ is called a labeled formula
+    \item
+        $\Phi$ set of formulae, $\Phi^{\alpha} = \{A^{\alpha} | A \in \Phi\}$
+    \item
+        Idea: instead of $\emptyset \vdash Th$, show $\lnot Th \vdash \bot$
+    \item
+        Analyzed in a tree to determine satisfiability
+    \item
+        Branches correspond to valuations (models)
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.8]{figures/302}
+        \end{figure}
+    \item
+        Saturated tableau: no rule yields anymore new results
+    \item
+        Closed branch: ends on $\bot$ (closed tableau: every branch is closed)
+    \item
+        Open branch yields model in saturated tableaux
+    \item
+        $A$ is a $T_0$ theorem ($\vdash_{T_0} A$), iff there is a closed tableaux with $A^F$ at root
+    \item
+        $\Phi \subseteq wff_0(V_0)$ derives $A$ in $T_0$ ($\Phi \vdash_{T_0} A$), iff there is a closed tableau starting with $A^F$ and $\Phi^T$
+\begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.8]{figures/308}
+\end{figure} 
+\end{itemize}
+\subsubsection{Resolution}
+\begin{itemize}
+    \item
+        Operates on single inference rule:
+\begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.8]{figures/312}
+\end{figure} 
+    \item
+        Let $S$ be a clause set, then we call a $R$ derivation $D: S \vdash_R \square$ a resolution refutation
+    \item
+        Resolution proof: We call a resolution refutation of $CNF(A^F)$ a resolution proof
+\end{itemize}
 \end{document}
 
