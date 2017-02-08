@@ -1,0 +1,52 @@
+\section*{9. Rosenblatt's Perceptron}
+\begin{itemize}
+    \item
+        We want to compute a linear decision boundary and assume, that classes are lineary seperable
+    \item
+        Computation of a linear separating hyperplane that minimizes the distance of misclassified feature vectors to the decision boundary
+\end{itemize}
+\subsection*{Objective Function}
+\begin{itemize}
+    \item
+        Class numbers $y = +- 1$, decision boundary is linear function $y^* = sgn(\alpha^T x + \alpha_0)$
+    \item
+        Parameters $\alpha_0$ and $\alpha$ are chosen according to the optimization problem
+        $$ minimize \{ D(\alpha_0, \alpha) = - \sum_{x_i \in M} y_i (\alpha^T x_i + \alpha_0)\} $$
+        where $M$ includes the misclassified feature vectors
+\end{itemize}
+\subsection*{Minimization of the Objective Function}
+\begin{itemize}
+    \item
+        The gradient of the objective function is:
+        $$\ffrac{\delta}{\delta \alpha_0} D(\alpha_0, \alpha) = - \sum_{x_i \in M} y_i$$ 
+        $$\ffrac{\delta}{\delta \alpha} D(\alpha_0, \alpha) = - \sum_{x_i \in M} y_i * x_i$$
+    \item
+        Input: training data $S = \{(x_1, y_1), \dots, (x_m, y_m)\}$
+        \begin{lstlisting}[mathescape]
+        initialize $k=0$, $\alpha_0^{(0)} = 0$ and $\alpha^{(0)} = 0$
+        repeat
+            select pair $(x_i, y_i)$ from training set
+            if $y_i \cdot (x_i^T \alpha^{(k)} + \alpha_0^{(k)}) \leq 0$ then
+                $\begin{pmatrix} \alpha_0^{(k+1)} \\ \alpha^{(k+1)} \end{pmatrix} =
+                \begin{pmatrix} \alpha_0^{(k)} \\ \alpha^{(k)} \end{pmatrix} + 
+                \begin{pmatrix} y_i \\ y_i \cdot x_i \end{pmatrix} $
+                $k \leftarrow k + 1$
+            end if
+        until $y_i \cdot (x_i^T \alpha^{(k)} + \alpha_0^{(k)}) > 0$ for all $i$
+        Output: $\alpha_0^{(k)}$ and $\alpha^{(k)}$
+        \end{lstlisting}
+    \item
+        $\alpha$ is linear combination of feature vectors, the final linear decision boundary depends on initialization
+    \item
+        If data are not linearly separable, the proposed learning algorithm will not converge. The algorithm will end up in hard to detect cycles.
+    \item
+        Convergence Theorem:\\
+        Assume the for all $i = 1,2,\dots,m$
+        $$ y_i (x_i^T \alpha^* + \alpha_0^*) \geq p $$
+        where $p > 0$ and $\norm{\alpha^*} = 1$. Let $M = max_i \norm{x_i}_2$.
+        The perceptron learning algorithm converges to linear decision boundary after $k$ iterations, where $k$ is bounded by
+        $$ k \leq \ffrac{(\alpha_0^{*2} + 1)(1+M^2)}{p^2} $$
+    \item
+        Number of iterations does not depend on the dimension of the feature vectors
+\end{itemize}
+
