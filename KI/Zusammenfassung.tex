@@ -777,5 +777,137 @@ Decomposition, Cutset Conditioning, CP with Local Search TODO
     \item
         Resolution proof: We call a resolution refutation of $CNF(A^F)$ a resolution proof
 \end{itemize}
+
+\section{First-Order Logic}
+\begin{itemize}
+    \item
+        Skipping Syntax and Semantics...
+\end{itemize}
+\subsection{First-Order Calculi}
+\begin{itemize}
+    \item
+        First-Order Natural Deduction
+    \item
+        Add the following rules:
+\end{itemize}
+\begin{figure}[H]
+            \centering
+            \includegraphics[scale=1]{figures/403}
+\end{figure} 
+
+\begin{itemize}
+    \item
+        $\exists E$: Since we know that there exists something for which $A$ is the case, we'll introduce a new constant to refer to that thing
+\end{itemize}
+\subsection{Abstract Consitency and Model Existence}
+\begin{itemize}
+    \item
+        Skipping
+\end{itemize}
+\subsection{A Completeness Proof for First-Order Natural Deduction}
+\begin{itemize}
+    \item
+        Skipping
+\end{itemize}
+\section{First-Order Inference}
+\subsection{First-Order Standard Tableau}
+\begin{figure}[H]
+            \centering
+            \includegraphics[scale=1]{figures/426}
+\end{figure} 
+\begin{itemize}
+    \item
+        Skipping again...
+\end{itemize}
+\subsection{First-Order Unification}
+\begin{itemize}
+    \item
+        Problem: For given terms $A$ and $B$ find a substitution $\sigma$, such that $\sigma(A) = \sigma(B)$
+    \item
+        Notation:
+        \begin{itemize}
+            \item 
+                $A =^? B$
+            \item
+                Set of unifiers: $U(A =^? B)$
+        \end{itemize}
+    \item
+        Most general unifier: all other unifier can be obtained from it by (further) instantiation\\
+    \item
+        Idea: Unification is equation solving
+    \item
+        We call a formula $A^1 =^? B^1 \land \dots \land A^n =^? B^n$ an equational system iff $A^i, B^i$ are well-formed formulae
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=1]{figures/unification}
+    \end{figure} 
+
+    \item
+        ...
+\end{itemize}
+\subsection{First-Order Resolution}
+\begin{itemize}
+    \item
+        Prerequisite: Formula in CNF
+    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.8]{figures/cnf}
+    \end{figure} 
+
+    \item
+        2 rules:
+ 
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.8]{figures/444}
+    \end{figure} 
+
+\end{itemize}
+\section{Prolog}
+TODO
+
+\section{Planning}
+\begin{itemize}
+    \item
+        Ambition: Write one program that can solve all classical search problems
+    \item
+        Planning language problem descriptions: 
+        \begin{itemize}
+            \item
+                Possible states
+            \item
+                Initial state I
+            \item
+                Goal condition G
+            \item
+                Set A of actions in terms of preconditions and effects
+            \item
+                Solution(plan): sequence of actions from A, transforming I into a state that satisfies G
+        \end{itemize}
+    \item
+        Trade-off between automatic and general vs. manualwork but effective
+    \item
+        Satisficing planning: outputs plan or unsolvable for planning task
+    \item
+        Optimal planning: ouputs optimal plan or unsolvable for planning task
+    \item
+        Programs solving these problems are called planner, planning system or planning tool
+\end{itemize}
+\subsection{History of Planning Algorithms}
+Skipping
+\subsection{The STRIPS Planning Formalism}
+\begin{itemize}
+    \item
+        STRIPS has only boolean variables
+    \item
+        A STRIPS planning task is a quadruple $\Pi = (P, A, I, G)$ where:
+        \begin{itemize}
+            \item
+                P is a finite set of facts
+            \item
+                A is a finite set of actions. $a \in A$ is a triple $a=(pre_a, add_a, del_a)$ of subsets of $P$ referred to as the action's precondition, add list, and delte list respectively. We require $add_a \cap del_a = \emptyset$
+        \end{itemize}
+\end{itemize}
 \end{document}
 
