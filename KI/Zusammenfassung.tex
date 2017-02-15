@@ -3,7 +3,7 @@
 \usepackage{hyperref}
 \usepackage{amssymb}
 \usepackage{mathtools}
-\usepackage{float}
+\usepackage{float} 
 \usepackage[a4paper, left=1cm, right=1cm, top=2cm, bottom=3cm]{geometry}
 
 \newcommand{\ffrac}[2]{\ensuremath{\frac{\displaystyle #1}{\displaystyle #2}}}
@@ -907,6 +907,10 @@ Skipping
                 P is a finite set of facts
             \item
                 A is a finite set of actions. $a \in A$ is a triple $a=(pre_a, add_a, del_a)$ of subsets of $P$ referred to as the action's precondition, add list, and delte list respectively. We require $add_a \cap del_a = \emptyset$
+            \item
+                $I \subseteq P$ is the initial state
+            \item
+                $G \subseteq P$ is the goal
         \end{itemize}
 \end{itemize}
 \end{document}
