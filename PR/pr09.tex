@@ -22,19 +22,19 @@
         $$\ffrac{\delta}{\delta \alpha} D(\alpha_0, \alpha) = - \sum_{x_i \in M} y_i * x_i$$
     \item
         Input: training data $S = \{(x_1, y_1), \dots, (x_m, y_m)\}$
-        \begin{lstlisting}[mathescape]
-        initialize $k=0$, $\alpha_0^{(0)} = 0$ and $\alpha^{(0)} = 0$
-        repeat
-            select pair $(x_i, y_i)$ from training set
-            if $y_i \cdot (x_i^T \alpha^{(k)} + \alpha_0^{(k)}) \leq 0$ then
-                $\begin{pmatrix} \alpha_0^{(k+1)} \\ \alpha^{(k+1)} \end{pmatrix} =
-                \begin{pmatrix} \alpha_0^{(k)} \\ \alpha^{(k)} \end{pmatrix} + 
-                \begin{pmatrix} y_i \\ y_i \cdot x_i \end{pmatrix} $
-                $k \leftarrow k + 1$
-            end if
-        until $y_i \cdot (x_i^T \alpha^{(k)} + \alpha_0^{(k)}) > 0$ for all $i$
-        Output: $\alpha_0^{(k)}$ and $\alpha^{(k)}$
-        \end{lstlisting}
+    \begin{lstlisting}[mathescape]
+    initialize $k=0$, $\alpha_0^{(0)} = 0$ and $\alpha^{(0)} = 0$
+    repeat
+        select pair $(x_i, y_i)$ from training set
+        if $y_i \cdot (x_i^T \alpha^{(k)} + \alpha_0^{(k)}) \leq 0$ then
+            $\begin{pmatrix} \alpha_0^{(k+1)} \\ \alpha^{(k+1)} \end{pmatrix} =
+            \begin{pmatrix} \alpha_0^{(k)} \\ \alpha^{(k)} \end{pmatrix} + 
+            \begin{pmatrix} y_i \\ y_i \cdot x_i \end{pmatrix} $
+            $k \leftarrow k + 1$
+        end if
+    until $y_i \cdot (x_i^T \alpha^{(k)} + \alpha_0^{(k)}) > 0$ for all $i$
+    Output: $\alpha_0^{(k)}$ and $\alpha^{(k)}$
+    \end{lstlisting}
     \item
         $\alpha$ is linear combination of feature vectors, the final linear decision boundary depends on initialization
     \item

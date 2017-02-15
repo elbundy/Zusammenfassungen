@@ -89,15 +89,47 @@ $$X =\begin{pmatrix}
 \end{pmatrix} \in \mathbb{R}^{m \times (d+1)}, y = \begin{pmatrix} y_1 \\ y_2\\ \dots \\y_m \end{pmatrix}$$
 and define $\theta = \begin{pmatrix} \alpha \\ \alpha_0\end{pmatrix}$.
 
-    One option to estimate $\theta$ is to solve the linear regression problem (minimize least-square error):
+One option to estimate $\theta$ is to solve the linear regression problem (minimize least-square error):
 $$\hat{\theta} = \underset{\theta}{argmin} \norm{X \theta - y}_2^2 = \underset{\theta}{argmin} \sum_{i=1}^{m} (\theta^T x_i - y_i)^2 = \underset{\theta}{argmin} (X \theta - y)^T (X \theta -y)$$
 and thus we get
 $$ \hat{\theta} = (X^T X)^{-1} X^T y $$
 if the colum vectors of $X$ are mutually independent.
-
-Regression vs. Classification: Continuous output vs. discrete output
+\begin{itemize}
+    \item
+        Regression vs. Classification: Continuous output vs. discrete output\\
+\end{itemize}
+\textbf{Huber Norm}
+$$ \varphi_{Huber}(z) = \begin{cases} z^2 & \text{if } |z| \leq M \\ M(2 |z| - M) & \text{if } |z| > M\end{cases} $$
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{figures/Huber_loss}
+    \caption{Huber loss (green) vs. Squared error loss (blue)}
+\end{figure}
+\begin{itemize}
+    \item
+        Makes regression more robust to outliers
+\end{itemize}
 
 \subsubsection*{Ridge Regression}
-In ridge regression we extend the objective function by an additional term constraining the Euclidian length of the parameter vector $\theta$:
+In ridge regression (also called Regularized Regression) we extend the objective function by an additional term constraining the Euclidian length of the parameter vector $\theta$:
 $$ \hat{\theta} = \underset{\theta}{argmin} \norm{X\Theta - y}_2^2 + \lambda \norm{\theta}_2^2$$
+\begin{itemize}
+    \item
+        Motivation: 
+        \begin{itemize}
+            \item 
+                LSE works well when number of observations much bigger then number of predictors. If both numbers are kind of equal $\rightarrow$ Overfitting
+            \item
+                LSE can't distinguish variables with little or no influence
+        \end{itemize}
+    \item
+        Can shrink parameters close to zero
+\end{itemize}
+\subsubsection*{Lasso (least absolute shrinkage and selection operator)}
+Regularized regression using a mixture of $L_2$- and $L_1$-norm, where the residual is penalized using the $L_2$-norm and the regularizer uses the $L_1$-norm
+$$ \hat{\theta} = \underset{\theta}{argmin} \norm{X\theta - y}_2^2 + \lambda \cdot \norm{\theta}_1$$
+\begin{itemize}
+    \item
+        Can shrink some parameters exaclty to zero $\rightarrow$ variable selection
+\end{itemize}
 

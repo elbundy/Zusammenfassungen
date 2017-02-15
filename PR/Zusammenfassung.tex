@@ -1,4 +1,4 @@
-\documentclass{scrartcl}
+\documentclass[fleqn]{scrartcl}
 
 \usepackage{hyperref}
 \usepackage{amssymb}
@@ -6,7 +6,10 @@
 \usepackage{gensymb}
 \usepackage{float}
 \usepackage{listings}
-
+\usepackage{amsmath}
+\usepackage{fixltx2e}
+\usepackage{mathpazo}
+\usepackage{xcolor}
 \usepackage[a4paper, left=1cm, right=1cm, top=2cm, bottom=3cm]{geometry}
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
@@ -14,10 +17,27 @@
 \DeclarePairedDelimiter\inner{\langle}{\rangle}%
 \newcommand{\ffrac}[2]{\ensuremath{\frac{\displaystyle #1}{\displaystyle #2}}}
 
+%Dirty
+\makeatletter
+\catcode`\$=\active
+\protected\def${\new@ifnextchar$\faleichik@dmath\faleichik@math}
+\def\faleichik@math#1${\(#1\)}
+\def\faleichik@dmath$#1$${\[#1\]}
+\makeatother
+
+\lstset{ 
+    basicstyle=\fontfamily{pcr}\selectfont\color{black},
+    numbers=none, % where to put the line-numbers
+    numberstyle=\tiny, % the size of the fonts that are used for the line-numbers     
+    %backgroundcolor=\color{lightgray},
+    tabsize=2, % sets default tabsize to 2 spaces
+    rulesepcolor=\color{gray},
+    rulecolor=\color{black},
+}
+
 \begin{document}
 % Introduction
 \include{pr01}
-%TODO: Evaluation Methods
 
 % Pattern Recognition Basics
 \include{pr02}
@@ -38,6 +58,7 @@
 \include{pr07}
 
 % Norms (8)
+\include{pr08}
 
 % Rosenblatt's Perceptron
 \include{pr09}
@@ -48,18 +69,19 @@
 
 % SVM + Kernels
 \include{pr12_to_pr15}
-%TODO PCA, Fisher Kernels, Support Vector Regression
 
 % Laplacian SVM (16)
 
-% EM-Algorithm (17) !!!!!
+% EM-Algorithm (17)
+\include{pr17}
 
-% Addaptive Segmentation of MRI Data (18)
+% Adaptive Segmentation of MRI Data (18)
 
 % Independent Component Analysis (19)
 
 % Model Assessment (20)
 
-% AdaBoost (21) !!!!!!
+% AdaBoost (21)
+\include{pr21}
 
 \end{document}

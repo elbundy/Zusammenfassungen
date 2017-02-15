@@ -1,141 +1,181 @@
-\section*{12 - 15. Support Vector Machines and Kernels}
-This sections content mostly comes from \textit{Bernhard Schölkopf, Alexander J.Smola - Learning with Kernels}.\\
-The stuff about Duality comes from \textit{Stephen Boyd, Lieven Vandenberghe - Convex Optimization}.\\
-\textbf{TODO:} Kernel PCA, SVM Regression, Fisher Kernels
-\subsection*{Problem Formulation}
-\subsubsection*{Hyperplanes}
+\section*{12 - 15. Support Vector Machines, Duality and Kernels}
+\textbf{Source:} Hastie, Tibshirani, Friedman - The Elements of Statistical Learning
+\subsection*{Separating Hyperplanes}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1]{figures/hyperplane}
+\end{figure}
 \begin{itemize}
+    \item 
+        Hyperplane $L$ is defined by $f(x) = \beta_0 + \beta^T x = 0$
     \item
-        Given: dot product space $H$ and set of patterns $x_{1}, \dots, x_{m} \in H$.
-    \item
-        Any hyperplane in $H$ can be written as 
-        $$\{x \in H | \inner{w, x} + b = 0\}, w \in H, b \in \mathbb{R}$$
-    \item
-        $w$ is vector orthogonal to hyperplane.
-    \item
-        Canonical Hyperplanes: 
-        The pair $(w,b) \in H \times \mathbb{R}$ is called a canonical form of the hyperplane with respect to $x_{1}, \dots, x_{m} \in H$ if it is scaled such that
-        $$ min_{\; i=1, \dots, m \;} \abs{\inner{w, x_{i}} + b} = 1$$
-        so the closest point to the hyperplane has a distance of \ffrac{1}{\norm{w}}.
-    \item
-        Decision function:
-        \begin{align*}
-        f_{w,b}: \; & H \rightarrow \{-1, +1\}\\
-            & x \rightarrow f_{w,b}(x) = sgn(\inner{w,x}+b)
-        \end{align*}
-\end{itemize}
-
-\subsubsection*{(Geometrical) Margin}
-\begin{itemize}
-    \item
-        For a hyperplane $\{x \in H | \inner{w,x} +b = 0\}$, we call
-        $$ p_{(w, b)}(x,y) = y(\inner{w,x}+b)/\norm{w}$$
-        the geometrical margin of the point $(x,y) \in H \times \{-1, +1\}$.
-
-    \item
-        The minimum value
-        $$ p_{(w, b)} = min_{\;i=1,\dots,m} \;p_{(w, b)}(x_{i},y_{i})$$
-        shall be called the geometrical margin of the training set.
-    \item
-        For canonical hyperplanes, the margin is $\ffrac{1}{\norm{w}}$.
-\end{itemize}
-
-\subsubsection*{Optimal Margin Hyperplanes}
-\begin{itemize}
-    \item
-        Set of examples $(x_1, y_1), \dots, (x_m, y_m)$.
-    \item
-        Goal: Find hyperplane with maximum margin, which satisfies $f_{w,b}(x_i) = y_i$ with
-        $$f_{w,b}(x) = sgn(\inner{w,x}+b)$$
-        for all examples.
-    \item
-        Canonicality implies $y_i(\inner{x, x_i}+b) \geq 1$
-    \item
-        Solve following problem:
-        \begin{align*}
-            maximize \; \; & \ffrac{1}{\norm{w}}\\
-            subject \; to \; \; & y_i(\inner{w, x_i}+b) \geq 1 %\;\; \forall i=1, \dots, m
-        \end{align*}
-        which is equal to
-        \begin{align*}
-            minimize \; \; & \ffrac{1}{2}\norm{w}^2\\
-            subject \; to \; \; & y_i(\inner{w, x_i}+b) \geq 1 %\;\; \forall i=1, \dots, m
-        \end{align*}
-    \item
-        Soft-Margin case:
-        \begin{align*}
-            minimize \; \; & \ffrac{1}{2}\norm{w}^2 + \mu \sum_i \xi_i\\
-            subject \; to \; \; & -(y_i(\inner{w, x_i}+b)-1+\xi_i) \leq 0 \\%\;\; \forall i=1, \dots, m\\
-            & -\xi_i \leq 0 \;\; %\forall i=1, \dots, m
-        \end{align*}
-
-\end{itemize}
-
-\subsubsection*{Dual form of the optimization problem (Hard-Margin case)}
-\begin{itemize}
-    \item
-        Lagrangian:
-        $$L(w,b,\alpha) = \ffrac{1}{2}\norm{w}^2-\sum_{i=1}^{m}\alpha_i(y_i(\inner{w,x_i}+b)-1)$$
-    \item
-        Karush-Kuhn-Tucker: Gradient of the Lagrangian must be zero at optimum
-    \item
-        $$\ffrac{\delta}{\delta b}L(w,b,\alpha) = 0, \;\; \ffrac{\delta}{\delta w}L(w,b,\alpha) = 0$$
-        yields
-        $$\sum_{i=1}^{m}\alpha_i y_i = 0, \;\; w = \sum_{i=1}^{m}\alpha_i y_i x_i$$
-    \item
-        Substituting the conditions for extremum we arrive at the dual form of the optimization problem:
-        \begin{align*}
-            maximize \; \; & W(\alpha) = \sum_{i=1}^{m}\alpha_i - \ffrac{1}{2}\sum_{i,j=1}^{m}\alpha_i \alpha_j y_i y_j \inner{x_i,x_j}\\
-            subject \; to \; \; & \alpha_i \geq 0, i=1,\dots,m \\%\;\; \forall i=1, \dots, m
-            & \sum_{i=1}^{m} \alpha_i y_i = 0
-        \end{align*}
-    \item
-        Decision function:
-        $$f(x) = sgn(\sum_{i=1}^{m}\alpha_i y_i \inner{x,x_i}+b)$$
-    \item
-        Karush-Kuhn-Tucker: $\alpha_i[y_i(\inner{w,x_i}+b)-1]=0 \;\;\forall i=1,\dots ,m$\\
-        Patterns $x_i$, for which $a_i > 0$ are called \textit{Support Vectors}.
-\end{itemize}
-\subsection*{Kernels}
-\begin{itemize}
-    \item
-        \textit{Problem}: SVMs can only be used, when classes are linearly seperable
-    \item
-        \textit{Solution}: Apply feature transform $\phi: \mathbb{R}^{d} \rightarrow \mathbb{R}^{D}, D \geq d$, such that the resulting features $\phi(x_i)$ are linearly seperable.
-    \item
-        Additionally, feature vectors only appear in inner products, both in the learning and the classification phase.
-    \item
-        \textit{Idea:} Introduce kernels $k(x, x') = \inner{\phi(x), \phi(x')}$, which calculate the values of inner products of transformed feature vectors.
-    \item
-        \textit{Kernel trick}: Kernels can be defined in a way, such that the transform $\phi$ doesn't even have to be computed, which saves computation time.
-    \item
-        \textbf{Example:}
-        $$x = (x_1, x_2),\;\; \phi(x) = (x_1^2, x_2^2, x_1 x_2, x_2 x_1)$$
-        $$\inner{\phi(x), \phi(x')} = x_1^2 x_1 '^2 + x_2^2 x_2 '^2 + 2 x_1 x_2 x_1' x_2' = \inner{x, x'}^2$$
-        so
-        $$ k(x, x') = \inner{\phi(x), \phi(x')} = \inner{x,x'}^2$$
-    \item
-        Kernel matrix:
-        $$ K = [K_{ij}], \; \; K_{i,j} = \inner{\phi(x_i), \phi(x_j)}$$
-    \item
-        Typical kernel functions:
+        Properties:
         \begin{itemize}
             \item
-                Linear: $k(x, x') = \inner{x, x'}$
+                For any two points $x_1$ and $x_2$ lying in L, $\beta^T (x_1-x_2)=0$, and hence $\beta^* = \beta / \norm{\beta}$ is the vector normal to the surface of L
             \item
-                Polynomial: $k(x, x') = (\inner{x,x'} + 1)^d$
+                For any point $x_0$ in $L$, $\beta x_0 = -\beta_0$
             \item
-                Laplacian radial basis function: $k(x, x') = e^{-\ffrac{\norm{x-x'}_1}{\sigma^2}}$
+                The signed distance of any point $x$ in $L$ is given by
+                $$\beta^{*T} (x - x_0) = \ffrac{1}{\norm{\beta}} (\beta^T x + \beta_0)$$
+        \end{itemize}
+        Hence $f(x)$ is proportional to the signed distance from $x$ to the hyperplane defined by $f(x) = 0$
+\end{itemize}
+
+\subsection*{Optimal Separating Hyperplanes}
+\begin{itemize}
+    \item
+        Optimization problem:
+        $$ \underset{\beta, \beta_0, \norm{\beta}}{max} M$$
+        $$ \text{subject to } y_i (x_i^T)\beta + \beta_0 \geq M, i=1,\dots,N$$ 
+    \item
+        The set of conditions ensure that all the points are at least a signed distance $M$ from the decision boundary
+    \item
+        We can get rid of the $\norm{\beta} = 1$ constraint by replacing the condition with 
+        $$\ffrac{1}{\norm{\beta}} y_i (x_i^T)\beta + \beta_0 \geq M$$
+        or equivalently
+        $$y_i (x_i^T)\beta + \beta_0 \geq M \norm{\beta}$$
+    \item
+        Since for any $\beta$ and $\beta_0$ satisfying these inequalities, any positively scaled multiple satisfies them too, we can arbitratily set $\norm{\beta} = 1/M$. The following then is an equivalent formulation:
+        $$\underset{\beta, \beta_0}{min}\ffrac{1}{2} \norm{\beta}^2$$
+        $$\text{subject to } y_i (x_i^T)\beta + \beta_0 \geq 1$$
+    \item
+        The constraints define a margin around the decision boundary of thickness $1/\norm{\beta}$. We choose $\beta$ and $\beta_0$ to maximize its thickness.
+    \item
+        The Lagrange (primal) function to be minimized w.r.t $\beta$ and $\beta_0$ is 
+        $$L_P = \ffrac{1}{2} \norm{\beta}^2 - \sum_1^N \alpha_i [y_i(x_i^T \beta + \beta_0) -1]$$
+    \item
+        Setting the derivatives to zero, we obtain:
+        $$ \beta = \sum_{i=1}^{N} \alpha_i y_i x_i$$
+        $$ 0 = \sum_{i=1}^N \alpha_i y_i $$
+    \item
+        Substituting these into the Lagrange function, we obtain the so-called Wolfe dual:
+        $$ L_D = \sum_{i=1}^{N} \alpha_i - \ffrac{1}{2} \sum_{i=1}^{N} \sum_{k=1}^{N} \alpha_i \alpha_k y_i y_k x_i^T x_k$$
+        $$ \text{subject to } \alpha_i \geq 0 \text{ and } \sum_{i=1}^{N} \alpha_i y_i = 0$$
+    \item
+        This is a simpler convex optimization problem
+    \item
+        The solution must satisfy the Karush-Kuhn-Tucker conditions, including complementary slackness:
+        $$\alpha_i [y_i (x_i^T \beta + \beta_0) - 1] = 0 \forall i$$
+    \item
+        From this we can see that:
+        \begin{itemize}
             \item
-                Gaussian radial basis function: $k(x, x') = e^{-\ffrac{\norm{x-x'}_2^2}{\sigma^2}}$
+                if $\alpha_i > 0$, then $y_i (x_i^T \beta + \beta_0) = 1$, or in other words, $x_i$ is on the boundary of the margin
             \item
-                Sigmoid kernel: $k(x, x') = tanh(\alpha \inner{x, x'} + \beta)$
+                if $y_i(x_i^T \beta + \beta_0) > 1$, $x_i$ is not on the boundary of the margin and $\alpha_i = 0$
         \end{itemize}
     \item
-        \textbf{TODO}: Mercers Theorem
+        From the above equation $\beta = ...$ we see that the soultion vector $\beta$ is defined in terms of a linear combination of the support vectors $x_i$
+    \item
+        The decision function of the Optimal Margin Classifier is defined by $G(x) = sign(f(x))$\\
 
+    \item
+        For the soft margin case, we have the following problem
+        $$\underset{\beta, \beta_0}{min}\ffrac{1}{2} \norm{\beta}^2 + \mu \sum_i \xi_i$$
+        \begin{align*}
+            \text{subject to } & y_i (x_i^T)\beta + \beta_0 \geq 1\\
+            & -\xi_i \leq 0
+        \end{align*}
+        where $\xi_i$ are called slack variables
+    \item
+        Big cost parameter $\mu$ makes margin smaller (focuses attention more on correctly classified points near the decision boundary), while smaller values make it larger (involves data further away)
 \end{itemize}
-\subsection*{Duality (or why the Laplacian shit works)}
+
+\subsection*{SVM and Kernels}
+\begin{itemize}
+    \item
+        Support vector classifier so far is restricted to linearly seperable classes
+    \item
+        One way to solve this would be to use basis expansion (transform into higher dimensional space) to make the classes linearly seperable, where the downside is the increasingly high computation cost
+    \item
+        Observation: inside the solution of optimization problem $x_i$'s only occur as inner products
+    \item
+        Applying the basis function $h$ we get:
+        $$ L_D = \sum_{i=1}^N \alpha_i - \ffrac{1}{2} \sum_{i=1}^N \sum_{i'=1}^N \alpha_i \alpha_{i'} y_i y_{i'} \inner{h(x_i), h(x_i')}$$
+        and
+        $$ f(x) = h(x)^T \beta + \beta_0 = \sum_{i=1}^{N} \alpha_i y_i \inner{h(x), h(x_i)} + \beta_0$$
+    \item
+        We need not speficy the transformation $h(x)$ at all, but require only knowledge of the kernel function
+        $$ K(x, x') = \inner{h(x), h(x')}$$
+        that computes the inner products in the transformed space. K should be a symmetric positive (semi-) definite function
+    \item
+        Three popular choices for $K$ in the SVM literature are:
+        \begin{itemize}
+            \item
+                $d$-th Degree polynomial: $K(x, x') = (1 + \inner{x, x'})^D$
+            \item
+                Radial basis: $K(x,x') = exp(-\varphi \norm{x-x'}^2)$
+            \item
+                Neural network: $K(x, x') = tanh(\kappa_1 \inner{x, x'} + \kappa_2)$
+        \end{itemize}
+\end{itemize}
+
+\subsection*{SVM for Regression}
+\begin{itemize}
+    \item
+        Linear regression model $f(x) = x^T \beta + \beta_0$
+    \item
+        To estimate $\beta$, we consider the minimization of
+        $$H(\beta, \beta_0) = \sum_{i=1}^N V(y_i - f(x_i)) + \ffrac{\lambda}{2} \norm{\beta}^2$$
+        where 
+        \[ V_{\epsilon}(r)=
+        \begin{cases}
+            0 & \text{if } \norm{r} < \epsilon\\
+            |r| - \epsilon &\text{otherwise}
+        \end{cases}
+        \]
+    \item
+        $\epsilon$ is parameter of loss function, $\lambda$ is a more traditional regulariatzion parameter
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=1]{figures/svm_regression}
+    \end{figure}
+\end{itemize}
+
+\subsection*{Kernel PCA}
+\begin{itemize}
+    \item
+        PCA:
+        \begin{itemize}
+            \item 
+                Compute the scatter matrix (covariance matrix)
+                $$\Sigma = \ffrac{1}{m} \sum_{i=1}^{m} x_i x_i^T$$
+            \item
+                Compute the eigenvectors and eigenvalues
+                $$\Sigma e_i = \lambda_i e_i$$
+        \end{itemize}
+    \item
+        The eigenvetors $e_i$ span the same space as the feature vectors
+    \item
+        Each eigenvector $e_i$ can be written as a linear combination of feature vectors
+        $$e_i = \sum_{k} a_{i,k} x_k$$
+    \item
+        Reformulation:
+        $$ \Sigma e_i = \lambda_i e_i$$
+        $$ (\ffrac{1}{m} \sum_{j=1}^{m} x_j x_j^T)\cdot \sum_k a_{i,k} x_k = \lambda_i \sum_k a_{i,k}x_k$$
+        $$ \sum_{j,k} a_{i,k} x_j x_j^T x_k = m \cdot \lambda_i \sum_k a_{i,k} x_k$$
+    \item
+        Multiply by $x_l^T$:
+        $$ \sum_{j,k} a_{i,k} x_l^T x_j x_j^T x_k = m \cdot \lambda_i \sum_k a_{i,k} x_l^T x_k$$
+    \item
+        For any kernel $k(x,x')$, we get the key equation for Kernel PCA
+        $$ \sum_{j,k} a_{i,k} k(x_l,x_j) k(x_j,x_k) = m \cdot \lambda_i \sum_k a_{i,k} k(x_l,x_k)$$
+    \item
+        This can be written in matrix notation using a matrix $K \in \mathbb{R}^{m\times m}$ and a vector $a_i = (a_{i,1}, a_{i,2} , \dots, a_{i,m})^T$
+        $$K a_i = m \lambda_i a_i$$
+    \item
+        Kernel PCA (and thus classical PCA) can be computed by solving an eigenvector/-value problem for an $(m \times m)$-matrix, where $m$ is the cardinality of the training feature set
+    \item
+        The principal components cannot be computed easily, because only the kernel is known, but not $\phi(x)$
+    \item
+        However the projection $c$ of the transformed feature vector $\phi(x)$ on principal component $e_i = \sum_k a_{i,k} \phi(x_k)$ is easily computed by
+        $$c = \phi(x)^T e_i = \dots = \sum_k a_i,k k(x,x_k)$$
+    \item
+        Transformed features have to have zero mean, which can be achieved by modifying $K$
+\end{itemize}
+
+\subsection*{Duality}
 \subsubsection*{The Lagrange dual function}
 \begin{itemize}
     \item
@@ -143,7 +183,7 @@ The stuff about Duality comes from \textit{Stephen Boyd, Lieven Vandenberghe - C
         \begin{align*}
             minimize \; \; & f_0(x)\\
             subject \; to \; \; & f_i(x) \leq 0 \\ %\;\; \forall i=1, \dots, m
-            & h_i(x) \leq 0 \\
+            & h_i(x) = 0 \\
         \end{align*}
         Optimal value: $p^*$\\
         We do not assume the problem is \textbf{convex}.
@@ -219,3 +259,4 @@ The stuff about Duality comes from \textit{Stephen Boyd, Lieven Vandenberghe - C
 \end{enumerate}
 
 So you can say: If your problem satisfies Slatters condition, it is possible to find the optimal solution via the dual problem formulation, because strong duality holds. If your solution satifies the Karush-Kuhn-Tucker optimality conditions, you have found the optimal solution.
+

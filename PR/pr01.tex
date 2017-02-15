@@ -1,11 +1,9 @@
 \section*{1. Introduction}
-\textbf{TODO: Performance Evaluation}
 \subsection*{Patter Recognition Pipeline}
-\begin{align*}
-    \textbf{recording} \rightarrow \textbf{preprocessing} \rightarrow \textbf{feature extraction} \rightarrow \textbf{classif}& \textbf{ication} \rightarrow\\
-    & \uparrow\\
-    \textbf{training set} \rightarrow \textbf{trai} & \textbf{ning} 
-\end{align*}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.6]{figures/pipeline}
+\end{figure}
 
 \subsection*{Posulates of Pattern Recognition}
 \begin{enumerate}
@@ -32,4 +30,51 @@
 \end{enumerate}
 
 \subsection*{Performance Evaluation}
-    \textbf{TODO}
+\begin{itemize}
+%    \item
+%        General confusion matrix:
+%\begin{figure}[H]
+%    \centering
+%    \includegraphics[scale=0.7]{figures/conf_general}
+%\end{figure}
+    \item
+        Two class confusion matrix:
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{figures/conf_two}
+\end{figure}
+    \item
+        Performance measures:
+        \begin{itemize}
+            \item
+                TP rate (recall, sensitivity):  $\ffrac{\#TP}{\#TP + \#FN}$
+            \item
+                FP rate (false alarm rate):  $\ffrac{\#FP}{\#FP+\#TN}$ 
+            \item
+                TN rate (specifity): $\ffrac{\#TN}{\#FP+\#TN}$ = 1 - false positive rate
+            \item
+                Precision: $\ffrac{\#TP}{\#TP+\#FP}$ 
+            \item
+                Negative prediction value: $\ffrac{\#TN}{\#TN+\#FN}$
+            \item
+                Accuracy: $$ACC = \ffrac{\#TP + \#TN}{\#TP + \#FP + \#FN + \#TN}$$ 
+            \item
+                F-measure: harmonic mean of recall and precision: $$F = \ffrac{2\cdot \text{recall} \cdot \text{precision}}{\text{recall} + \text{precision}}$$
+        \end{itemize}
+    \item
+        Receiver Operation Characteristics (ROC) Curves: A classifier defined a single 2-d point (y-axis: TP rate)
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.7]{figures/roc1}
+        \end{figure}
+    \item
+        Compute ROC curve of classifier: Varying threshold results in varying TPR/FPR
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.7]{figures/roc2}
+        \end{figure}
+    \item
+        Performance measure: area under curve (AUC)
+
+\end{itemize}
+
